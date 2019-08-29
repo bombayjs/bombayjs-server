@@ -1,6 +1,5 @@
-# hackernews-async-ts
+# bombayjs-server
 
-[Hacker News](https://news.ycombinator.com/) showcase using typescript && egg
 
 ## QuickStart
 
