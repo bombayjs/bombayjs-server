@@ -10,4 +10,5 @@ module.exports = (app: Application) => {
     // 应用列表
     apiV1Router.get('/admin', tokenRequired, api.index);
     apiV1Router.post('/register', api.register);
+    apiV1Router.post('/login', api.login);
 };
