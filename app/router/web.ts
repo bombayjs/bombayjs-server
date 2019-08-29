@@ -2,8 +2,8 @@ import { Application } from 'egg';
 
 module.exports = (app: Application) => {
     const { router, controller } = app;
-    const { home } = controller;
+    const { index } = controller.web;
     // 应用列表
-    router.get('/web', home.index);
+    router.get('/web', index.index);
 
 };

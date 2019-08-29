@@ -2,10 +2,18 @@
 // Do not modify this file!!!!!!!!!
 
 import 'egg';
-import ExportHome from '../../../app/controller/home';
+import ExportApi from '../../../app/controller/api';
+import ExportWebIndex from '../../../app/controller/web/index';
+import ExportWxIndex from '../../../app/controller/wx/index';
 
 declare module 'egg' {
   interface IController {
-    home: ExportHome;
+    api: ExportApi;
+    web: {
+      index: ExportWebIndex;
+    }
+    wx: {
+      index: ExportWxIndex;
+    }
   }
 }
