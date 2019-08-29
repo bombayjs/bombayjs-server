@@ -11,4 +11,7 @@ module.exports = (app: Application) => {
     apiV1Router.get('/admin', tokenRequired, api.index);
     apiV1Router.post('/register', api.register);
     apiV1Router.post('/login', api.login);
+    apiV1Router.post('/logout', api.logout);
+    apiV1Router.post('/setIsUse', api.setIsUse);
+    apiV1Router.post('/delete', api.delete);
 };

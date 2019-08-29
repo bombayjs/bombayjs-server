@@ -112,4 +112,48 @@ export default class User extends Service {
     return await this.ctx.model.User.findOne({ user_name: userName }).exec() || {};
   }
 
+  /* 登出
+    * @param {*} usertoken
+    * @returns
+    * @memberof UserService
+  */
+  logout(usertoken) {
+    this.ctx.cookies.set('usertoken', '');
+    this.app.redis.set(`${usertoken}_user_login`, '');
+    return {};
+  }
+
+  /* 冻结解冻用户
+    * @param {*} id
+    * @param {*} isUse
+    * @param {*} usertoken
+    * @returns
+    * @memberof UserService
+  */
+  async setIsUse(id, isUse, usertoken) {
+    // 冻结用户信息
+    isUse = isUse * 1;
+    const result = await this.ctx.model.User.update(
+        { _id: id },
+        { is_use: isUse },
+        { multi: true }
+    ).exec();
+    // 清空登录态
+    this.app.redis.set(`${usertoken}_user_login`, '');
+    return result;
+}
+
+  /* 删除用户
+  * @param {*} id
+  * @param {*} usertoken
+  * @returns
+  * @memberof UserService
+  */
+  async delete(id, usertoken) {
+      // 删除
+      const result = await this.ctx.model.User.findOneAndRemove({ _id: id }).exec();
+      // 清空登录态
+      if (usertoken) this.app.redis.set(`${usertoken}_user_login`, '');
+      return result;
+  }
 }
