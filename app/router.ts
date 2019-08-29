@@ -1,7 +1,7 @@
 import { Application } from 'egg';
 
 export default (app: Application) => {
-  const { controller, router } = app;
-
-  router.get('/', controller.home.index);
+  require('./router/admin')(app);
+  require('./router/api/web')(app);
+  require('./router/api/wx')(app);
 };
