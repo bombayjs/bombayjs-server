@@ -4,7 +4,7 @@ const crypto = require('crypto');
 /**
  * Test Service
  */
-export default class User extends Service {
+export default class UserService extends Service {
 
   /* 用户登录
     * @param {*} userName
@@ -12,14 +12,21 @@ export default class User extends Service {
     * @return
     * @memberof UserService
   */
-  async login(userName, passWord) {
+  async login(ctx) {
+    const query = ctx.request.body;
+    const userName = query.userName;
+    const passWord = query.passWord;
+
+    if (!userName) return this.app.retError('用户登录：userName不能为空');
+    if (!passWord) return this.app.retError('用户登录：passWord不能为空');
+
     const userInfo = await this.getUserInfoForUserName(userName) || {};
     const newPwd = crypto.createHmac('sha256', passWord)
         .update(this.app.config.user_pwd_salt_addition)
         .digest('hex');
 
-    if (userInfo.pass_word !== newPwd) return '用户密码不正确！';
-    if (userInfo.is_use !== 0) return '用户被冻结不能登录，请联系管理员！';
+    if (userInfo.pass_word !== newPwd) return this.app.retError('用户密码不正确！');
+    if (userInfo.is_use !== 0) return this.app.retError('用户被冻结不能登录，请联系管理员！');
 
     // 清空以前的登录态
     if (userInfo.usertoken) this.app.redis.set(`${userInfo.usertoken}_user_login`, '');
@@ -37,7 +44,9 @@ export default class User extends Service {
     // 更新用户信息
     await this.updateUserToken({ username: userName, usertoken: random_key });
 
-    return userInfo;
+    return this.app.retResult({
+      data: userInfo,
+    });
   }
 
   /* 更新用户登录态随机数
@@ -67,12 +76,17 @@ export default class User extends Service {
     * @returns
     * @memberof UserService
   */
-  async register(userName, passWord) {
+  async register(ctx) {
+    const query = ctx.request.body;
+    const userName = query.userName;
+    const passWord = query.passWord;
+
+    if (!userName) return this.app.retError('用户登录：userName不能为空');
+    if (!passWord) return this.app.retError('用户登录：passWord不能为空');
+
     // 检测用户是否存在
     const userInfo = await this.getUserInfoForUserName(userName);
-    if (userInfo.token) {
-      return '用户名不存在！';
-    }
+    if (userInfo.token) return this.app.retError('用户名不存在！');
 
     const newPwd = crypto.createHmac('sha256', passWord)
         .update(this.app.config.user_pwd_salt_addition)
@@ -100,7 +114,9 @@ export default class User extends Service {
         signed: true,
     });
 
-    return result;
+    return this.app.retResult({
+      data: result,
+    });
   }
 
   /* 根据用户名称查询用户信息
@@ -117,10 +133,18 @@ export default class User extends Service {
     * @returns
     * @memberof UserService
   */
-  logout(usertoken) {
+  logout(ctx) {
+    const usertoken = ctx.cookies.get('usertoken', {
+      encrypt: true,
+      signed: true,
+    }) || '';
+    if (!usertoken) return this.app.retError('退出登录：token不能为空');
+
     this.ctx.cookies.set('usertoken', '');
     this.app.redis.set(`${usertoken}_user_login`, '');
-    return {};
+    return this.app.retResult({
+      data: {},
+    });
   }
 
   /* 冻结解冻用户
@@ -130,7 +154,14 @@ export default class User extends Service {
     * @returns
     * @memberof UserService
   */
-  async setIsUse(id, isUse, usertoken) {
+  async setIsUse(ctx) {
+    const query = ctx.request.body;
+    let isUse = query.isUse || 0;
+    const id = query.id || '';
+    const usertoken = query.usertoken || '';
+
+    if (!id) return this.app.retError('冻结解冻用户：id不能为空');
+
     // 冻结用户信息
     isUse = isUse * 1;
     const result = await this.ctx.model.User.update(
@@ -140,8 +171,10 @@ export default class User extends Service {
     ).exec();
     // 清空登录态
     this.app.redis.set(`${usertoken}_user_login`, '');
-    return result;
-}
+    return this.app.retResult({
+      data: result,
+    });
+  }
 
   /* 删除用户
   * @param {*} id
@@ -149,11 +182,34 @@ export default class User extends Service {
   * @returns
   * @memberof UserService
   */
-  async delete(id, usertoken) {
-      // 删除
-      const result = await this.ctx.model.User.findOneAndRemove({ _id: id }).exec();
-      // 清空登录态
-      if (usertoken) this.app.redis.set(`${usertoken}_user_login`, '');
-      return result;
+  async delete(ctx) {
+    const query = ctx.request.body;
+    const id = query.id || '';
+    const usertoken = query.usertoken || '';
+    if (!id) return this.app.retError('删除用户：id不能为空');
+    // 删除
+    const result = await this.ctx.model.User.findOneAndRemove({ _id: id }).exec();
+    // 清空登录态
+    if (usertoken) this.app.redis.set(`${usertoken}_user_login`, '');
+    return this.app.retResult({
+      data: result,
+    });
   }
+
+  /* 根据token查询用户信息
+    * @param {*} usertoken
+    * @returns
+    * @memberof UserService
+  */
+  async finUserForToken(usertoken) {
+    let user_info: any = await this.app.redis.get(`${usertoken}_user_login`);
+
+    if (user_info) {
+        user_info = JSON.parse(user_info);
+        if (user_info.is_use !== 0) return { desc: '用户被冻结不能登录，请联系管理员！' };
+    } else {
+        return null;
+    }
+    return await this.ctx.model.User.findOne({ token: user_info.token }).exec();
+}
 }

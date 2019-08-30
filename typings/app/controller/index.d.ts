@@ -2,13 +2,15 @@
 // Do not modify this file!!!!!!!!!
 
 import 'egg';
-import ExportApi from '../../../app/controller/api';
+import ExportProject from '../../../app/controller/project';
+import ExportUser from '../../../app/controller/user';
 import ExportWebIndex from '../../../app/controller/web/index';
 import ExportWxIndex from '../../../app/controller/wx/index';
 
 declare module 'egg' {
   interface IController {
-    api: ExportApi;
+    project: ExportProject;
+    user: ExportUser;
     web: {
       index: ExportWebIndex;
     }
