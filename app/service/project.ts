@@ -15,7 +15,7 @@ export default class ProjectService extends Service {
     if (search && search.system_domain) return this.app.retError('新增项目信息操作：项目已存在');
 
     // 存储数据
-    const token = query.app_id ? query.app_id : this.app.randomString();
+    const token = this.app.randomString();
 
     const project = ctx.model.Project();
     project.system_domain = query.system_domain;
@@ -143,19 +143,18 @@ export default class ProjectService extends Service {
   async deleteSystem(ctx) {
     const query = ctx.request.body;
     const appId = query.appId;
-
     if (!appId) return this.app.retError('删除某个系统：appId不能为空');
 
-    const result = await this.ctx.model.Project.findOneAndRemove({ app_id: appId }).exec();
+    const result = await this.ctx.model.Project.findOneAndDelete({ app_id: appId }).exec();
     this.app.redis.set(appId, '', 'EX', 200);
-    setTimeout(async () => {
-      const mongoose: any = this.app.mongooseDB;
-      try { await mongoose.dropCollection(`web_pages_${appId}`); } catch (err) { console.log(err); }
-      try { await mongoose.dropCollection(`web_ajaxs_${appId}`); } catch (err) { console.log(err); }
-      try { await mongoose.dropCollection(`web_errors_${appId}`); } catch (err) { console.log(err); }
-      try { await mongoose.dropCollection(`web_resources_${appId}`); } catch (err) { console.log(err); }
-      try { await mongoose.dropCollection(`web_environment_${appId}`); } catch (err) { console.log(err); }
-    }, 500);
+    // setTimeout(async () => {
+    //   const mongoose: any = this.app.mongooseDB;
+    //   try { await mongoose.dropCollection(`web_pages_${appId}`); } catch (err) { console.log(err); }
+    //   try { await mongoose.dropCollection(`web_ajaxs_${appId}`); } catch (err) { console.log(err); }
+    //   try { await mongoose.dropCollection(`web_errors_${appId}`); } catch (err) { console.log(err); }
+    //   try { await mongoose.dropCollection(`web_resources_${appId}`); } catch (err) { console.log(err); }
+    //   try { await mongoose.dropCollection(`web_environment_${appId}`); } catch (err) { console.log(err); }
+    // }, 500);
     return this.app.retResult({ data: result });
   }
 

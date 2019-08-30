@@ -31,7 +31,7 @@ module.exports = (app: Application) => {
     // 新增应用中某个用户
     apiV1Router.post('/project/addUser', tokenRequired, project.addWebSystemUser);
     // 删除某个应用
-    apiV1Router.post('/project/deleteSystem', tokenRequired, project.deleteSystem);
+    apiV1Router.post('/project/delete', tokenRequired, project.deleteSystem);
     // 日报邮件操作
     apiV1Router.post('/project/handleDaliyEmail', tokenRequired, project.handleDaliyEmail);
 };

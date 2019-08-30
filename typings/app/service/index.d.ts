@@ -4,10 +4,14 @@
 import 'egg';
 import ExportProject from '../../../app/service/project';
 import ExportUser from '../../../app/service/user';
+import ExportWebReport from '../../../app/service/web/report';
 
 declare module 'egg' {
   interface IService {
     project: ExportProject;
     user: ExportUser;
+    web: {
+      report: ExportWebReport;
+    }
   }
 }

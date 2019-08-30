@@ -49,6 +49,17 @@ export default (appInfo: EggAppInfo) => {
     origin: 'http://127.0.0.1:7002',
     user_pwd_salt_addition: 'BOMBAYJSUSERSALT',
     user_login_timeout: 86400, // 用户登录态持续时间 1 天
+    redis_consumption: {
+      // 定时任务执行时间
+      task_time: '*/20 * * * * *',
+      // 每次定时任务消费线程数(web端)
+      thread_web: 100,
+      // 每次定时任务消费线程数(wx端)
+      thread_wx: 100,
+      // 消息队列池限制数, 0：不限制 number: 限制条数，高并发时服务优雅降级方案
+      total_limit_web: 10000,
+      total_limit_wx: 10000,
+    },
   };
 
   // the return config will combines to EggAppConfig
