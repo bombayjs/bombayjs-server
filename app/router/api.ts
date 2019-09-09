@@ -4,17 +4,16 @@ module.exports = (app: Application) => {
     const apiV1Router = app.router.namespace('/api/v1');
     const { controller, middleware } = app;
     const { user, project } = controller;
-
     const tokenRequired = middleware.tokenRequired();
-
+    const jwt = middleware.jwt();
     // 用户
     apiV1Router.get('/user/admin', user.index);
-    apiV1Router.get('/user/currentUser', tokenRequired, user.currentUser);
+    apiV1Router.get('/user/currentUser', jwt, user.currentUser);
     apiV1Router.post('/user/register', user.register);
     apiV1Router.post('/user/login', user.login);
-    apiV1Router.post('/user/logout', tokenRequired, user.logout);
-    apiV1Router.post('/user/setIsUse', tokenRequired, user.setIsUse);
-    apiV1Router.post('/user/delete', tokenRequired, user.delete);
+    apiV1Router.post('/user/logout', jwt, user.logout);
+    apiV1Router.post('/user/setIsUse', jwt, user.setIsUse);
+    apiV1Router.post('/user/delete', jwt, user.delete);
 
     // ----------------应用配置相关---------------
     // 新增应用

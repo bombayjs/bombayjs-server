@@ -44,12 +44,17 @@ export default (appInfo: EggAppInfo) => {
     allowMethods: 'GET,PUT,POST,DELETE,OPTIONS',
   };
 
+  config.jwt = {
+    secret: 'igola2019',
+    expiresIn: 36000,
+  };
+
   // add your special config in here
   const bizConfig = {
     sourceUrl: `https://github.com/eggjs/examples/tree/master/${appInfo.name}`,
     origin: [ 'http://127.0.0.1:7002', 'http://localhost:7002', 'http://localhost:8000', 'http://127.0.0.1:8000' ],
     user_pwd_salt_addition: 'BOMBAYJSUSERSALT',
-    user_login_timeout: 86400, // 用户登录态持续时间 1 天
+    user_login_timeout: 60 * 60 * 24, // 用户登录态持续时间 1 天
     redis_consumption: {
       // 定时任务执行时间
       task_time: '*/20 * * * * *',
