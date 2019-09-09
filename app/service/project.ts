@@ -39,9 +39,7 @@ export default class ProjectService extends Service {
     const result = await project.save();
     // 存储到redis
     this._updateSystemCache(token);
-    return this.app.retResult({
-        data: result,
-    });
+    return this.app.retResult(result);
   }
 
   // 保存用户上报的数据
@@ -75,7 +73,7 @@ export default class ProjectService extends Service {
     ).exec();
     // 更新redis缓存
     this._updateSystemCache(appId);
-    return this.app.retResult({ data: result });
+    return this.app.retResult(result);
   }
 
   // 根据用户id获取项目列表
@@ -83,14 +81,14 @@ export default class ProjectService extends Service {
     const token = ctx.request.query.token;
     if (!token) return [];
     const result = await ctx.model.Project.where('user_id').elemMatch({ $eq: token }).exec() || [];
-    return this.app.retResult({ data: result });
+    return this.app.retResult(result);
   }
 
   // 获得某个项目信息(数据库)
   async getSystemForDb(appId) {
     if (!appId) return this.app.retError('查询某个项目信息：appId不能为空');
     const result = await this.ctx.model.Project.findOne({ app_id: appId }).exec() || {};
-    return this.app.retResult({ data: result });
+    return this.app.retResult(result);
   }
 
   // 获得项目列表信息
@@ -105,7 +103,7 @@ export default class ProjectService extends Service {
         },
       },
     ]).exec();
-    return this.app.retResult({ data: result });
+    return this.app.retResult(result);
   }
 
   // 删除项目中某个用户
@@ -121,7 +119,7 @@ export default class ProjectService extends Service {
       { app_id: appId },
       { $pull: { user_id: userToken } },
       { multi: true }).exec();
-    return this.app.retResult({ data: result });
+    return this.app.retResult(result);
   }
 
   // 项目中新增某个用户
@@ -136,7 +134,7 @@ export default class ProjectService extends Service {
           { app_id: appId },
           { $addToSet: { user_id: userToken } },
           { multi: true }).exec();
-    return this.app.retResult({ data: result });
+    return this.app.retResult(result);
   }
 
   // 删除某个项目
@@ -155,7 +153,7 @@ export default class ProjectService extends Service {
     //   try { await mongoose.dropCollection(`web_resources_${appId}`); } catch (err) { console.log(err); }
     //   try { await mongoose.dropCollection(`web_environment_${appId}`); } catch (err) { console.log(err); }
     // }, 500);
-    return this.app.retResult({ data: result });
+    return this.app.retResult(result);
   }
 
   // 新增 | 删除 日报邮件
@@ -181,7 +179,7 @@ export default class ProjectService extends Service {
     // 更新邮件相关信息
     if (handleEmali) this.updateEmailSystemIds(email, appId, type, item);
 
-    return this.app.retResult({ data: result });
+    return this.app.retResult(result);
   }
 
   // 更新邮件信息

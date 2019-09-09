@@ -3,7 +3,8 @@ import { Controller } from 'egg';
 export default class UserController extends Controller {
   public async index() {
     const { ctx } = this;
-    ctx.body = await ctx.model.User.find({});
+    this.ctx.cookies.set('usertoken', '1111111');
+    ctx.body = {a: 1};
   }
 
   // 用户注册
@@ -34,5 +35,11 @@ export default class UserController extends Controller {
   async delete() {
     const { ctx } = this;
     ctx.body = await ctx.service.user.delete(ctx);
+  }
+
+    // 获取当前用户
+  async currentUser() {
+    const { ctx } = this;
+    ctx.body = await ctx.service.user.currentUser(ctx);
   }
 }

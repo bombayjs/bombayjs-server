@@ -39,14 +39,15 @@ export default (appInfo: EggAppInfo) => {
   };
 
   config.cors = {
-    origin: '*',
-    allowMethods: 'GET,PUT,POST,DELETE',
+    credentials: true,
+    origin: 'http://localhost:8000',
+    allowMethods: 'GET,PUT,POST,DELETE,OPTIONS',
   };
 
   // add your special config in here
   const bizConfig = {
     sourceUrl: `https://github.com/eggjs/examples/tree/master/${appInfo.name}`,
-    origin: 'http://127.0.0.1:7002',
+    origin: [ 'http://127.0.0.1:7002', 'http://localhost:7002', 'http://localhost:8000', 'http://127.0.0.1:8000' ],
     user_pwd_salt_addition: 'BOMBAYJSUSERSALT',
     user_login_timeout: 86400, // 用户登录态持续时间 1 天
     redis_consumption: {

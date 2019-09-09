@@ -8,7 +8,8 @@ module.exports = (app: Application) => {
     const tokenRequired = middleware.tokenRequired();
 
     // 用户
-    apiV1Router.get('/user/admin', tokenRequired, user.index);
+    apiV1Router.get('/user/admin', user.index);
+    apiV1Router.get('/user/currentUser', tokenRequired, user.currentUser);
     apiV1Router.post('/user/register', user.register);
     apiV1Router.post('/user/login', user.login);
     apiV1Router.post('/user/logout', tokenRequired, user.logout);
