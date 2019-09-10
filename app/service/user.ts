@@ -32,8 +32,9 @@ export default class UserService extends Service {
     const token = await this.service.actionToken.apply(userInfo._id);
     console.log(token);
     this.app.redis.set(`${userInfo._id}_user_login`, JSON.stringify(userInfo), 'EX', this.app.config.user_login_timeout);
-    const returnUser = _.pick(userInfo, [ 'system_ids', 'is_use', 'level', '_id', 'create_time', 'user_name', ]);
+    const returnUser = _.pick(userInfo, [ 'system_ids', 'is_use', 'level', 'create_time', 'user_name', ]);
     returnUser.token = token;
+    returnUser.id = userInfo._id;
     return this.app.retResult(returnUser);
   }
 
@@ -148,7 +149,8 @@ export default class UserService extends Service {
     }
 
     if (user_info) {
-      const returnUser = _.omit(user_info, [ 'password' ]);
+      const returnUser = _.omit(user_info, [ 'password', '_id' ]);
+      returnUser.id = user_info._id;
       return this.app.retResult(returnUser);
     } else {
       return this.app.retError('获取当前用户信息：用户不存在');
