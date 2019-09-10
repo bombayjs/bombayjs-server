@@ -54,7 +54,7 @@ export default class UserService extends Service {
 
     // 检测用户是否存在
     const userInfo = await this.getUserInfoForUserName(userName);
-    if (userInfo.token) return this.app.retError('用户名不存在！');
+    if (userInfo._id) return this.app.retError('用户已存在！');
 
     const newPwd = crypto.createHmac('sha256', password)
         .update(this.app.config.user_pwd_salt_addition)
