@@ -1,30 +1,43 @@
 import { Service } from 'egg';
 
+
 export default class ProjectService extends Service {
+  ProjectValidate: any;
+
+  constructor(props) {
+    super(props);
+    this.ProjectValidate = {
+      type: { type: 'string', required: true, allowEmpty: false, trim: true, desc: '新增项目信息操作：请选择类型' },
+      project_name: { type: 'string', required: true, allowEmpty: false, trim: true, desc: '新增项目信息操作：项目名称不能为空' },
+    };
+  }
   // 保存用户上报的数据
   async saveSystemData(ctx) {
     const query = ctx.request.body;
     const type = query.type;
     // 参数校验
-    if (!query.system_domain && type === 'web') return this.app.retError('新增项目信息操作：项目域名不能为空');
+    ctx.validate(this.ProjectValidate);
+    if(ctx.paramErrors) {
+      // get error infos from `ctx.paramErrors`;
+      return this.app.retError(ctx.paramErrors[0].desc);
+    }
     if (!query.app_id && type === 'wx') return this.app.retError('新增项目信息操作：appId不能为空');
-    if (!query.system_name) return this.app.retError('新增项目信息操作：项目名称不能为空');
 
     // 检验项目是否存在
-    const search = await ctx.model.Project.findOne({ system_domain: query.system_domain }).exec();
-    if (search && search.system_domain) return this.app.retError('新增项目信息操作：项目已存在');
+    const search = await ctx.model.Project.findOne({ project_name: query.project_name }).exec();
+    if (search) return this.app.retError('新增项目信息操作：项目已存在');
 
     // 存储数据
     const token = this.app.randomString();
 
     const project = ctx.model.Project();
-    project.system_domain = query.system_domain;
-    project.system_name = query.system_name;
+    project.project_name = query.project_name;
+    project.token = token;
     project.type = query.type;
-    project.app_id = token;
-    project.user_id = [ query.token || '' ];
+    project.app_id = query.app_id;
+    project.user_id = [ ctx.currentUserId || '' ];
     project.create_time = new Date();
-    project.is_use = query.is_use;
+    project.is_use = query.is_use || 1;
     project.slow_page_time = query.slow_page_time || 5;
     project.slow_js_time = query.slow_js_time || 2;
     project.slow_css_time = query.slow_css_time || 2;
@@ -38,12 +51,12 @@ export default class ProjectService extends Service {
 
     const result = await project.save();
     // 存储到redis
-    this._updateSystemCache(token);
+    this._updateProjectCache(token);
     return this.app.retResult(result);
   }
 
   // 保存用户上报的数据
-  async updateSystemData(ctx) {
+  async updateProjectData(ctx) {
     const query = ctx.request.body;
     const appId = query.app_id;
     // 参数校验
@@ -51,8 +64,7 @@ export default class ProjectService extends Service {
 
     const update = { $set: {
         is_use: query.is_use || 0,
-        system_name: query.system_name || '',
-        system_domain: query.system_domain || '',
+        project_name: query.project_name || '',
         slow_page_time: query.slow_page_time || 5,
         slow_js_time: query.slow_js_time || 2,
         type: query.type || 'web',
@@ -72,12 +84,12 @@ export default class ProjectService extends Service {
         { multi: true }
     ).exec();
     // 更新redis缓存
-    this._updateSystemCache(appId);
+    this._updateProjectCache(appId);
     return this.app.retResult(result);
   }
 
   // 根据用户id获取项目列表
-  async getSysForUserId(ctx) {
+  async getProjectsForUserId(ctx) {
     const token = ctx.request.query.token;
     if (!token) return [];
     const result = await ctx.model.Project.where('user_id').elemMatch({ $eq: token }).exec() || [];
@@ -92,7 +104,7 @@ export default class ProjectService extends Service {
   }
 
   // 获得项目列表信息
-  async getWebSystemList() {
+  async getWebProjectList() {
     const result = await this.ctx.model.Project.aggregate([
       {
         $lookup: {
@@ -107,7 +119,7 @@ export default class ProjectService extends Service {
   }
 
   // 删除项目中某个用户
-  async deleteWebSystemUser(ctx) {
+  async deleteWebProjectUser(ctx) {
     const query = ctx.request.body;
     const appId = query.appId;
     const userToken = query.userToken;
@@ -123,7 +135,7 @@ export default class ProjectService extends Service {
   }
 
   // 项目中新增某个用户
-  async addWebSystemUser(ctx) {
+  async addWebProjectUser(ctx) {
     const query = ctx.request.body;
     const appId = query.appId;
     const userToken = query.userToken;
@@ -138,7 +150,7 @@ export default class ProjectService extends Service {
   }
 
   // 删除某个项目
-  async deleteSystem(ctx) {
+  async deleteProject(ctx) {
     const query = ctx.request.body;
     const appId = query.appId;
     if (!appId) return this.app.retError('删除某个系统：appId不能为空');
@@ -174,7 +186,7 @@ export default class ProjectService extends Service {
         { multi: true }).exec();
 
     // 更新redis缓存
-    this._updateSystemCache(appId);
+    this._updateProjectCache(appId);
 
     // 更新邮件相关信息
     if (handleEmali) this.updateEmailSystemIds(email, appId, type, item);
@@ -185,7 +197,7 @@ export default class ProjectService extends Service {
   // 更新邮件信息
   async updateEmailSystemIds(email, appId, handletype = 1, handleitem = 1) {
       if (!email) return;
-      await this.ctx.service.emails.updateSystemIds({
+      await this.ctx.service.emails.updateProjectIds({
           email,
           appId,
           handletype,
@@ -194,7 +206,7 @@ export default class ProjectService extends Service {
   }
 
   // 更新redis缓存
-  async _updateSystemCache(appId) {
+  async _updateProjectCache(appId) {
     if (!appId) throw new Error('查询某个项目信息：appId不能为空');
     const project = await this.ctx.model.Project.findOne({ app_id: appId }).exec() || {};
     await this.app.redis.set(appId, JSON.stringify(project));

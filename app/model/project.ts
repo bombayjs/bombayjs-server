@@ -3,10 +3,11 @@ module.exports = app => {
   const Schema = mongoose.Schema;
 
   const schema = new Schema({
-    system_domain: { type: String }, // 系统 域名
-    system_name: { type: String }, // 系统名称
-    app_id: { type: String }, // 系统appId标识
+    project_name: { type: String }, // 系统名称
+    token: { type: String }, // 秘钥，唯一
+    app_id: { type: String }, // 小程序appId标识
     type: { type: String, default: 'web' }, // 浏览器：web  微信小程序 ：wx
+    // group_id: { type: Array }, // 应用所属分组ID
     user_id: { type: Array }, // 应用所属用户ID
     create_time: { type: Date, default: Date.now }, // 用户访问时间
     is_use: { type: Number, default: 0 }, // 是否需要统计  0：是  1：否
@@ -26,7 +27,7 @@ module.exports = app => {
     highest_list: { type: Array }, // 突破历史pv峰值时发送邮件列表
   });
 
-  schema.index({ app_id: -1, create_time: 1, system_domain: -1, user_id: -1 });
+  schema.index({ token: -1, create_time: 1, user_id: -1 });
 
   return mongoose.model('Project', schema);
 };

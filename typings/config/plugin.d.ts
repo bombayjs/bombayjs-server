@@ -18,6 +18,7 @@ import 'egg-mongoose';
 import 'egg-redis';
 import 'egg-cors';
 import 'egg-router-plus';
+import 'egg-valparams';
 import { EggPluginItem } from 'egg';
 declare module 'egg' {
   interface EggPlugin {
@@ -37,5 +38,6 @@ declare module 'egg' {
     redis?: EggPluginItem;
     cors?: EggPluginItem;
     routerPlus?: EggPluginItem;
+    valparams?: EggPluginItem;
   }
 }

@@ -2,25 +2,25 @@ import { Controller } from 'egg';
 
 export default class ProjectController extends Controller {
   // 新增系统
-  async addNewSystem() {
+  async addNewProject() {
     const { ctx } = this;
     ctx.body = await ctx.service.project.saveSystemData(ctx);
   }
 
   // 修改系统信息
-  async updateSystem() {
+  async updateProject() {
     const { ctx } = this;
-    return await ctx.service.project.updateSystemData(ctx);
+    return await ctx.service.project.updateProjectData(ctx);
   }
 
   // 根据用户id获取系统列表
-  async getSysForUserId() {
+  async getProjectsForUserId() {
     const { ctx } = this;
-    ctx.body = await ctx.service.project.getSysForUserId(ctx);
+    ctx.body = await ctx.service.project.getProjectsForUserId(ctx);
   }
 
   // 根据系统ID获得单个系统信息
-  async getSystemForId() {
+  async getProjectsForId() {
     const { ctx } = this;
     const query = ctx.request.query;
     const appId = query.appId;
@@ -28,27 +28,27 @@ export default class ProjectController extends Controller {
   }
 
   // 系统列表
-  async getWebSystemList() {
+  async getWebProjectList() {
     const { ctx } = this;
-    ctx.body = await ctx.service.project.getWebSystemList();
+    ctx.body = await ctx.service.project.getWebProjectList();
   }
 
   // 删除系统中某个用户
-  async deleteWebSystemUser() {
+  async deleteWebProjectUser() {
     const { ctx } = this;
-    ctx.body = await ctx.service.project.deleteWebSystemUser(ctx);
+    ctx.body = await ctx.service.project.deleteWebProjectUser(ctx);
   }
 
   // 系统中新增某个用户
-  async addWebSystemUser() {
+  async addWebProjectUser() {
     const { ctx } = this;
-    ctx.body = await ctx.service.project.addWebSystemUser(ctx);
+    ctx.body = await ctx.service.project.addWebProjectUser(ctx);
   }
 
   // 删除某个系统
-  async deleteSystem() {
+  async deleteProject() {
     const { ctx } = this;
-    ctx.body = await ctx.service.project.deleteSystem(ctx);
+    ctx.body = await ctx.service.project.deleteProject(ctx);
   }
 
   // 新增 | 删除 日报邮件

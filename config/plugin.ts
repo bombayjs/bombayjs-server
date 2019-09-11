@@ -18,6 +18,10 @@ const plugin: EggPlugin = {
     enable: true,
     package: 'egg-router-plus',
   },
+  valparams: {
+    enable: true,
+    package: 'egg-valparams',
+  },
 };
 
 export default plugin;
