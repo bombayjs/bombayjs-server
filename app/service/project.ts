@@ -12,7 +12,7 @@ export default class ProjectService extends Service {
     };
   }
   // 保存用户上报的数据
-  async saveSystemData(ctx) {
+  async saveProjectData(ctx) {
     const query = ctx.request.body;
     const type = query.type;
     // 参数校验
@@ -24,7 +24,7 @@ export default class ProjectService extends Service {
     if (!query.app_id && type === 'wx') return this.app.retError('新增项目信息操作：appId不能为空');
 
     // 检验项目是否存在
-    const search = await ctx.model.Project.findOne({ project_name: query.project_name }).exec();
+    const search = await ctx.model.Project.findOne({ project_name: query.project_name, type: query.type }).exec();
     if (search) return this.app.retError('新增项目信息操作：项目已存在');
 
     // 存储数据
@@ -97,7 +97,7 @@ export default class ProjectService extends Service {
   }
 
   // 获得某个项目信息(数据库)
-  async getSystemForDb(appId) {
+  async getProjectForDb(appId) {
     if (!appId) return this.app.retError('查询某个项目信息：appId不能为空');
     const result = await this.ctx.model.Project.findOne({ app_id: appId }).exec() || {};
     return this.app.retResult(result);

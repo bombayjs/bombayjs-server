@@ -4,7 +4,7 @@ export default class ProjectController extends Controller {
   // 新增系统
   async addNewProject() {
     const { ctx } = this;
-    ctx.body = await ctx.service.project.saveSystemData(ctx);
+    ctx.body = await ctx.service.project.saveProjectData(ctx);
   }
 
   // 修改系统信息
@@ -24,7 +24,7 @@ export default class ProjectController extends Controller {
     const { ctx } = this;
     const query = ctx.request.query;
     const appId = query.appId;
-    ctx.body = await ctx.service.project.getSystemForDb(appId);
+    ctx.body = await ctx.service.project.getProjectForDb(appId);
   }
 
   // 系统列表
