@@ -16,7 +16,7 @@ module.exports = app => {
   schema.index({ page: 1, create_time: -1 });
   schema.index({ create_time: -1 });
 
-  app.models.webErrors = (appId) => {
-    return mongoose.model(`web_errors_${appId}`, schema);
+  app.models.webErrors = (token: string) => {
+    return mongoose.model(`web_errors_${token}`, schema);
   };
 };

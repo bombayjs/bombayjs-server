@@ -206,17 +206,18 @@ export default class ProjectService extends Service {
   }
 
   // 更新redis缓存
-  async _updateProjectCache(appId) {
-    if (!appId) throw new Error('查询某个项目信息：appId不能为空');
-    const project = await this.ctx.model.Project.findOne({ app_id: appId }).exec() || {};
-    await this.app.redis.set(appId, JSON.stringify(project));
+  async _updateProjectCache(token) {
+    if (!token) throw new Error('查询某个项目信息：token不能为空');
+    const project = await this.ctx.model.Project.findOne({ token }).exec() || {};
+    await this.app.redis.set(token, JSON.stringify(project));
   }
-  // 获得某个项目信息(redis)
-  async _getSystemForAppId(appId) {
-      if (!appId) throw new Error('查询某个项目信息：appId不能为空');
-
-      const result = await this.app.redis.get(appId) || '{}';
-      return JSON.parse(result);
+  // 获得某个项目信息
+  async getProjectForToken(token) {
+      if (!token) throw new Error('查询某个项目信息：token不能为空');
+      let result = await this.app.redis.get(token) || '{}';
+      if (result === '{}') result = await this.ctx.model.Project.findOne({ token }).exec() || '{}';
+      if (result === '{}') return JSON.parse(result);
+      return result;
   }
 
 }

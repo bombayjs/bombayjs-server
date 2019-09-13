@@ -5,7 +5,7 @@ export default {
   page: { type: String }, // 页面
   times: { type: Number, default: 0 }, // 次数
   v: { type: String }, // 版本
-  appId: { type: String }, // 项目id
+  token: { type: String }, // 项目id
   e: { type: String }, // 环境
   begin: { type: Number, default: 0 }, // 开始时间戳
   uid: { type: String }, // user id

@@ -11,7 +11,7 @@ export default class ReportController extends Controller {
     ctx.status = 200;
 
     const query = ctx.request.query;
-    if (!query.appId) throw new Error('web端上报数据操作：app_id不能为空');
+    if (!query.token) throw new Error('web端上报数据操作：token不能为空');
 
     query.ip = ctx.get('X-Real-IP') || ctx.get('X-Forwarded-For') || ctx.ip;
     query.url = query.url || ctx.headers.referer;
