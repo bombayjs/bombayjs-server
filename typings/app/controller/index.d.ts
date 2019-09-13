@@ -4,6 +4,7 @@
 import 'egg';
 import ExportProject from '../../../app/controller/project';
 import ExportUser from '../../../app/controller/user';
+import ExportWebError from '../../../app/controller/web/error';
 import ExportWebIndex from '../../../app/controller/web/index';
 import ExportWebReport from '../../../app/controller/web/report';
 import ExportWxIndex from '../../../app/controller/wx/index';
@@ -13,6 +14,7 @@ declare module 'egg' {
     project: ExportProject;
     user: ExportUser;
     web: {
+      error: ExportWebError;
       index: ExportWebIndex;
       report: ExportWebReport;
     }

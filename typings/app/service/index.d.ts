@@ -5,6 +5,7 @@ import 'egg';
 import ExportActionToken from '../../../app/service/actionToken';
 import ExportProject from '../../../app/service/project';
 import ExportUser from '../../../app/service/user';
+import ExportWebError from '../../../app/service/web/error';
 import ExportWebReport from '../../../app/service/web/report';
 
 declare module 'egg' {
@@ -13,6 +14,7 @@ declare module 'egg' {
     project: ExportProject;
     user: ExportUser;
     web: {
+      error: ExportWebError;
       report: ExportWebReport;
     }
   }
