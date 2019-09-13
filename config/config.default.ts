@@ -8,7 +8,7 @@ export default (appInfo: EggAppInfo) => {
   config.keys = appInfo.name + '_1566973855378_2564';
 
   // add your egg config in here
-  config.middleware = [];
+  config.middleware = [ 'errorHandler' ];
 
   // mongodb 服务
   config.mongoose = {
@@ -45,7 +45,7 @@ export default (appInfo: EggAppInfo) => {
 
   config.jwt = {
     secret: 'igola2019',
-    expiresIn: 36000,
+    expiresIn: 60 * 60 * 12, // 12小时
   };
 
   config.valparams = {
