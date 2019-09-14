@@ -11,7 +11,7 @@ module.exports = app => {
     file: { type: String }, // 出错文件
     line: { type: Number, default: 0 }, // 行
     col: { type: Number, default: 0 }, // 列
-  });
+  }, { timestamps: true });
   schema.index({ t: 1, page: 1, create_time: -1 });
   schema.index({ page: 1, create_time: -1 });
   schema.index({ create_time: -1 });

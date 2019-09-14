@@ -9,7 +9,6 @@ module.exports = app => {
     type: { type: String, default: 'web' }, // 浏览器：web  微信小程序 ：wx
     // group_id: { type: Array }, // 应用所属分组ID
     user_id: { type: Array }, // 应用所属用户ID
-    create_time: { type: Date, default: Date.now }, // 用户访问时间
     is_use: { type: Number, default: 1 }, // 是否需要统计  1：是  0：否
     slow_page_time: { type: Number, default: 5 }, // 页面加载页面阀值  单位：s
     slow_js_time: { type: Number, default: 2 }, // js慢资源阀值 单位：s
@@ -25,7 +24,7 @@ module.exports = app => {
     daliy_list: { type: Array }, // 日报列表
     is_highest_use: { type: Number, default: 1 }, // 是否发送pv邮件  1：是  0：否
     highest_list: { type: Array }, // 突破历史pv峰值时发送邮件列表
-  });
+  }, { timestamps: true });
 
   schema.index({ token: -1, create_time: 1, user_id: -1 });
 

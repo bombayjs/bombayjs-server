@@ -20,5 +20,4 @@ export default {
   ul: { type: String }, // 语言
   ct: { type: String }, // 网络
   _v: { type: String }, // 脚本sdk版本
-  create_time: { type: Date, default: Date.now }, // 用户访问时间
 };
