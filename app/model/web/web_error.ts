@@ -12,11 +12,10 @@ module.exports = app => {
     line: { type: Number, default: 0 }, // 行
     col: { type: Number, default: 0 }, // 列
   }, { timestamps: true });
-  schema.index({ t: 1, page: 1, create_time: -1 });
-  schema.index({ page: 1, create_time: -1 });
-  schema.index({ create_time: -1 });
+  schema.index({ t: 1, page: 1 });
+  schema.index({ page: 1 });
 
-  app.models.webErrors = (token: string) => {
-    return mongoose.model(`web_errors_${token}`, schema);
+  app.models.webError = (token: string) => {
+    return mongoose.model(`web_error_${token}`, schema);
   };
 };

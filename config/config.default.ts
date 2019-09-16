@@ -70,6 +70,7 @@ export default (appInfo: EggAppInfo) => {
       total_limit_web: 10000,
       total_limit_wx: 10000,
     },
+    report_filter: [ 'page', 'county', 'ip', 'v', 'ct', ],
   };
 
   // the return config will combines to EggAppConfig

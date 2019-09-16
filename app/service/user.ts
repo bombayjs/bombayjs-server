@@ -32,7 +32,7 @@ export default class UserService extends Service {
     const token = await this.service.actionToken.apply(userInfo._id);
     console.log(token);
     this.app.redis.set(`${userInfo._id}_user_login`, JSON.stringify(userInfo), 'EX', this.app.config.user_login_timeout);
-    const returnUser = _.pick(userInfo, [ 'system_ids', 'is_use', 'level', 'create_time', 'user_name', ]);
+    const returnUser = _.pick(userInfo, [ 'system_ids', 'is_use', 'level', 'createdAt', 'user_name', ]);
     returnUser.token = token;
     returnUser.id = userInfo._id;
     return this.app.retResult(returnUser);
@@ -64,7 +64,6 @@ export default class UserService extends Service {
     const user = new this.ctx.model.User();
     user.user_name = userName;
     user.password = newPwd;
-    user.create_time = new Date();
     user.level = userName === 'admin' ? 0 : 1;
     const result = await user.save() || {};
     result.password = '';

@@ -7,8 +7,8 @@ export default class ProjectService extends Service {
   constructor(props) {
     super(props);
     this.ProjectValidate = {
-      type: { type: 'string', required: true, allowEmpty: false, trim: true, desc: '新增项目信息操作：请选择类型' },
-      project_name: { type: 'string', required: true, allowEmpty: false, trim: true, desc: '新增项目信息操作：项目名称不能为空' },
+      type: { type: 'string', required: true, trim: true, desc: '新增项目信息操作：请选择类型' },
+      project_name: { type: 'string', required: true, trim: true, desc: '新增项目信息操作：项目名称不能为空' },
     };
   }
   // 保存用户上报的数据
@@ -36,7 +36,6 @@ export default class ProjectService extends Service {
     project.type = query.type;
     project.app_id = query.app_id;
     project.user_id = [ ctx.currentUserId || '' ];
-    project.create_time = new Date();
     project.is_use = query.is_use || 1;
     project.slow_page_time = query.slow_page_time || 5;
     project.slow_js_time = query.slow_js_time || 2;

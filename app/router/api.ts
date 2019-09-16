@@ -38,4 +38,5 @@ module.exports = (app: Application) => {
     // ----------------web相关---------------
     // 获取error
     apiV1Router.post('/web/error/list', jwt, web.error.list);
+    apiV1Router.post('/web/error/filterList', jwt, web.error.filterList);
 };

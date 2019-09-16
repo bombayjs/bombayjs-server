@@ -26,7 +26,7 @@ module.exports = app => {
     highest_list: { type: Array }, // 突破历史pv峰值时发送邮件列表
   }, { timestamps: true });
 
-  schema.index({ token: -1, create_time: 1, user_id: -1 });
+  schema.index({ token: -1, user_id: -1 });
 
   return mongoose.model('Project', schema);
 };
