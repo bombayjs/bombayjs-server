@@ -1,6 +1,5 @@
 import { Service } from 'egg';
 
-
 export default class ProjectService extends Service {
   ProjectValidate: any;
 
@@ -218,5 +217,4 @@ export default class ProjectService extends Service {
       if (result === '{}') return JSON.parse(result);
       return result;
   }
-
 }

@@ -8,5 +8,5 @@ module.exports = (app: Application) => {
   const tokenRequired = middleware.tokenRequired();
   apiV1Router.get('/web', tokenRequired, index.index);
   // 浏览器用户数据上报
-  apiV1Router.get('/report/web', report.webReport);
+  apiV1Router.all('/report/web', report.webReport);
 };
