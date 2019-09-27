@@ -1,23 +1,16 @@
-import { Service } from 'egg';
-
-const _ =require('lodash');
-
+import { Service, Context } from "egg";
 class ReportService extends Service {
-
-  // 保存用户上报的数据
-  async saveWebReportData(ctx) {
-    const query = ctx.query;
-    const project = await this.service.project.getProjectForToken(query.token);
-    if (!project) return {};
-    if (project.is_use !== 1) return {};
-    const model = ctx.app.models[`web${_.capitalize(query.t)}`];
-    if (!model) return {};
-    let report = model(query.token)();
-    report = Object.assign(report, query);
-    report.save();
-    return {};
+  constructor(ctx: Context) {
+    super(ctx);
   }
-
+  // 所以上报数据保存
+  async save(payload) {
+    const { t, token } = payload;
+    const modelName = `Web${this.ctx.helper.capitalize(t)}`;
+    const collectionName = `web_${t}_${token}`;
+    await this.ctx.createModel(modelName, token, collectionName);
+    await this.service.web.base.create(payload);
+  }
 }
 
 module.exports = ReportService;

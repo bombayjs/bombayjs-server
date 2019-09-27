@@ -15,7 +15,7 @@ module.exports = app => {
   schema.index({ t: 1, page: 1 });
   schema.index({ page: 1 });
 
-  app.models.webError = (token: string) => {
+  app.models.WebError = (token: string) => {
     return mongoose.model(`web_error_${token}`, schema);
   };
 };

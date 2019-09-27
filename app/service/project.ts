@@ -217,4 +217,12 @@ export default class ProjectService extends Service {
       if (result === '{}') return JSON.parse(result);
       return result;
   }
+  async getProjectByToken(token){
+    let result:string = await this.app.redis.get(token)||'{}'
+    if(result === '{}'){
+      return await this.ctx.model.Project.findOne({ token }).exec()
+    }else{
+      return JSON.parse(result);
+    }
+  }
 }

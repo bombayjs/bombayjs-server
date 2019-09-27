@@ -1,19 +1,30 @@
 import { EggAppConfig, EggAppInfo, PowerPartial } from 'egg';
+const path = require('path');
+require('dotenv').config({ path: (path.join(__dirname, 'bombay.config'))});
+declare const process : NodeJS.Process & { 
+  env: NodeJS.ProcessEnv & {
+    MONGO_URI: string;
+    REDIS_CLUSTER: string
+  }
+}
 
+
+const { MONGO_URI, REDIS_CLUSTER } : {MONGO_URI?:string,REDIS_CLUSTER?:string}  = process.env;
 export default (appInfo: EggAppInfo) => {
   const config = {} as PowerPartial<EggAppConfig>;
-
   // override config from framework / plugin
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1566973855378_2564';
 
   // add your egg config in here
-  config.middleware = [ 'errorHandler' ];
-
+  config.middleware = [ 'errorHandler','reportWeb' ];
+  config.reportWeb = {
+    match: ['/api/v1/report/web']
+  }
   // mongodb 服务
   config.mongoose = {
     client: {
-      url: 'mongodb://127.0.0.1:27017/bombayjs',
+      url: MONGO_URI,
       options: {
           poolSize: 20,
       },
@@ -23,13 +34,15 @@ export default (appInfo: EggAppInfo) => {
   // redis配置
   config.redis = {
     client: {
-        port: 6379, // Redis port
-        host: '127.0.0.1', // Redis host
+        port:  +REDIS_CLUSTER.split(':')[1], // Redis port
+        host: REDIS_CLUSTER.split(':')[0], // Redis host
         password: '',
         db: 0,
     },
   };
+  config.multipart={
 
+  }
   config.security = {
     domainWhiteList: [ 'http://127.0.0.1:18090' ],
     csrf: {
@@ -47,12 +60,19 @@ export default (appInfo: EggAppInfo) => {
     secret: 'igola2019',
     expiresIn: 60 * 60 * 12, // 12小时
   };
-
+  config.bodyParser = {
+    enableTypes: ['json', 'form', 'text'],
+  };
   config.valparams = {
     locale    : 'zh-cn',
     throwError: false,
   };
-
+  config.multipart = {
+    mode: 'file',
+    whitelist: [
+      '.png',
+    ],
+  };
   // add your special config in here
   const bizConfig = {
     sourceUrl: `https://github.com/eggjs/examples/tree/master/${appInfo.name}`,

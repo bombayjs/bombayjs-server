@@ -1,0 +1,6 @@
+
+##Mongodb data base address 
+MONGO_URI={{ mongodb.url }}/bombayjs
+
+##Redis cluster address
+REDIS_CLUSTER={{ redis.url_list[0] }}

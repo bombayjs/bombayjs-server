@@ -13,6 +13,7 @@ export default class ErrorService extends Service {
       end: { type: 'date', required: true, trim: true, desc: '请选择结束时间' },
     };
   }
+
   // 获得列表信息
   async list(ctx) {
     const { key, token, begin, end } = ctx.request.body;

@@ -1,8 +1,7 @@
-module.exports = app => {
+module.exports = (app) => {
   const mongoose = app.mongoose;
-  const Schema = mongoose.Schema;
-
-  const schema = new Schema({
+  // const Schema = mongoose.Schema;
+  const ProjectSchema = new mongoose.Schema({
     project_name: { type: String }, // 系统名称
     token: { type: String }, // 秘钥，唯一
     app_id: { type: String }, // 小程序appId标识
@@ -25,8 +24,7 @@ module.exports = app => {
     is_highest_use: { type: Number, default: 1 }, // 是否发送pv邮件  1：是  0：否
     highest_list: { type: Array }, // 突破历史pv峰值时发送邮件列表
   }, { timestamps: true });
+  ProjectSchema.index({ token: -1, user_id: -1 });
 
-  schema.index({ token: -1, user_id: -1 });
-
-  return mongoose.model('Project', schema);
+  return mongoose.model('Project', ProjectSchema);
 };

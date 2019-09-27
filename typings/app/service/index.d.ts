@@ -3,19 +3,19 @@
 
 import 'egg';
 import ExportActionToken from '../../../app/service/actionToken';
-import ExportIpTask from '../../../app/service/ip_task';
 import ExportProject from '../../../app/service/project';
 import ExportUser from '../../../app/service/user';
+import ExportWebBase from '../../../app/service/web/base';
 import ExportWebError from '../../../app/service/web/error';
 import ExportWebReport from '../../../app/service/web/report';
 
 declare module 'egg' {
   interface IService {
     actionToken: ExportActionToken;
-    ipTask: ExportIpTask;
     project: ExportProject;
     user: ExportUser;
     web: {
+      base: ExportWebBase;
       error: ExportWebError;
       report: ExportWebReport;
     }

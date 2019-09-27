@@ -10,7 +10,7 @@
   "scripts": {
     "start": "egg-scripts start --daemon --title=egg-server-bombayjs-server",
     "stop": "egg-scripts stop --title=egg-server-bombayjs-server",
-    "dev": "egg-bin dev",
+    "dev": "egg-bin dev --port=7002",
     "debug": "egg-bin debug",
     "test-local": "egg-bin test",
     "test": "npm run lint -- --fix && npm run test-local",
@@ -32,7 +32,11 @@
     "egg-scripts": "^2.6.0",
     "egg-valparams": "^1.2.5",
     "jsonwebtoken": "^8.5.1",
-    "mongoose-schema-extend": "^0.2.2"
+    "mongoose-schema-extend": "^0.2.2",
+    "dotenv":"^7.0.0",
+    "egg-validate": "^2.0.2",
+    "moment": "^2.24.0",
+    "egg-multipart": "^2.9.0"
   },
   "devDependencies": {
     "@types/mocha": "^2.2.40",
