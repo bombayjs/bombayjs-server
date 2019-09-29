@@ -10,8 +10,8 @@ export default class RetcodeController extends Controller {
     // 组装参数
     const payload = ctx.request.body || {};
      // 调用 Service 进行业务处理
-    web.retcode.list(payload);
-    ctx.helper.success();
+    const res = await web.retcode.list(payload);
+    ctx.helper.success(res);
   }
 
 }

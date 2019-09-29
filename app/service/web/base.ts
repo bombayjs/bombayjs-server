@@ -10,8 +10,8 @@ class BaseService extends Service {
    */
   public async create(payload) {
     const { t, token } = payload;
-    const collectionName = `web_${t}_${token}`;
-    const model = this.ctx.getModel(collectionName);
+    const collectionName = `web_${t}_${token.toLowerCase()}`;
+    const model = await this.ctx.getModel(collectionName);
     return model.create(payload);
   }
 

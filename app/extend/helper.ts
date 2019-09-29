@@ -25,8 +25,8 @@ module.exports = {
     }, obj);
     return obj;
   },
-  success() {
-    this.ctx.body = '';
+  success(res) {
+    this.ctx.body = res;
     this.ctx.status = 200;
   },
 };

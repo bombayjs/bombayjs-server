@@ -7,7 +7,7 @@ class ReportService extends Service {
   async save(payload) {
     const { t, token } = payload;
     const modelName = `Web${this.ctx.helper.capitalize(t)}`;
-    const collectionName = `web_${t}_${token}`;
+    const collectionName = `web_${t}_${token.toLowerCase()}`;
     await this.ctx.createModel(modelName, token, collectionName);
     await this.service.web.base.create(payload);
   }
