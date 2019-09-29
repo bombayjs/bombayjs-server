@@ -5,7 +5,8 @@ module.exports = options => {
     const startTime = moment();
     const find =  options.match.find(item=>ctx.url.includes(item))
     if(find){
-      const { err }:{err: Object} =  JSON.parse(ctx.request.body)||{}
+      console.dir(ctx.request.body)
+      const { err }:{err: Object} =  JSON.parse(ctx.request.body|| '{}')||{}
       const ip = ctx.get('X-Real-IP') || ctx.get('X-Forwarded-For') || ctx.ip;
       const url  = ctx.query.url || ctx.headers.referer;
       const user_agent = ctx.headers['user-agent'];
