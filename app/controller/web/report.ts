@@ -61,17 +61,12 @@ export default class ReportController extends Controller {
     const { ctx, service } = this;
     // 校验参数
     ctx.validate(this.VReport, ctx.query);
-    console.dir(JSON.parse(ctx.request.body))
-    const { err }:{err: Object} =  JSON.parse(ctx.request.body)||{}
-    const ip = ctx.get('X-Real-IP') || ctx.get('X-Forwarded-For') || ctx.ip;
-    const url  = ctx.query.url || ctx.headers.referer;
-    const user_agent = ctx.headers['user-agent'];
-    const payload  =  { ...ctx.query ,ip,url,user_agent,...err};
-    if(payload.token){
-      const tokenObj = await this.service.project.getProjectByToken(payload.token);
+    const { token } = ctx.query
+    if(token){
+      const tokenObj = await this.service.project.getProjectByToken(token);
       if(tokenObj.is_use===1){
         let { report } = service.web;
-        await report.save(payload)
+        await report.save(ctx.query)
       }
     }
     ctx.helper.success();
