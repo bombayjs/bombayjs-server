@@ -1,8 +1,9 @@
+// tslint:disable-next-line:no-var-requires
 const Url = require('url');
 
 // 校验用户是否登录
 module.exports = () => {
-    return async function(ctx, next) {
+    return async (ctx, next) => {
         const referer = ctx.request.header.referer || '';
         if (referer) {
           const url = new Url.URL(referer);

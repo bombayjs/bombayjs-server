@@ -26,10 +26,6 @@ const plugin: EggPlugin = {
     enable: true,
     package: 'egg-valparams',
   },
-  multipart:{
-    enable: true,
-    package: 'egg-multipart'
-  }
 
 };
 

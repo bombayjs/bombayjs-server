@@ -1,4 +1,4 @@
-import { Service, Context } from "egg";
+import { Service, Context } from 'egg';
 class ReportService extends Service {
   constructor(ctx: Context) {
     super(ctx);

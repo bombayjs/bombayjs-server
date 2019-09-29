@@ -1,6 +1,8 @@
 import { Service } from 'egg';
+// tslint:disable-next-line:no-var-requires
 const crypto = require('crypto');
-const _ =require('lodash')
+// tslint:disable-next-line:no-var-requires
+const _ = require('lodash');
 
 /**
  * Test Service
@@ -110,7 +112,7 @@ export default class UserService extends Service {
     const result = await this.ctx.model.User.update(
         { _id: id },
         { is_use: isUse },
-        { multi: true }
+        { multi: true },
     ).exec();
     // 清空登录态
     return this.app.retResult(result);

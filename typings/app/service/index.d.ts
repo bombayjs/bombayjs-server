@@ -8,6 +8,7 @@ import ExportUser from '../../../app/service/user';
 import ExportWebBase from '../../../app/service/web/base';
 import ExportWebError from '../../../app/service/web/error';
 import ExportWebReport from '../../../app/service/web/report';
+import ExportWebRetcode from '../../../app/service/web/retcode';
 
 declare module 'egg' {
   interface IService {
@@ -18,6 +19,7 @@ declare module 'egg' {
       base: ExportWebBase;
       error: ExportWebError;
       report: ExportWebReport;
+      retcode: ExportWebRetcode;
     }
   }
 }

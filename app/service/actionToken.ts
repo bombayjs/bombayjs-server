@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 import { Service } from 'egg';
 import * as jwt from 'jsonwebtoken';

@@ -1,5 +1,6 @@
 import { Service } from 'egg';
-const _ =require('lodash');
+// tslint:disable-next-line:no-var-requires
+const _ = require('lodash');
 
 export default class ErrorService extends Service {
   listValidator: any;

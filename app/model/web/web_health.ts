@@ -6,9 +6,9 @@ module.exports = app => {
     ...Report,
     healthy: { type: Number },
     stay: { type: Number },
-    errcount: {type: Number },
-    apisucc: {type: Number },
-    apifail: {type: Number }
+    errcount: { type: Number },
+    apisucc: { type: Number },
+    apifail: { type: Number },
   }, { timestamps: true });
   schema.index({ t: 1, page: 1 });
   schema.index({ page: 1 });

@@ -1,4 +1,4 @@
-module.exports = (app) => {
+module.exports = app => {
   const mongoose = app.mongoose;
   // const Schema = mongoose.Schema;
   const ProjectSchema = new mongoose.Schema({
@@ -25,6 +25,5 @@ module.exports = (app) => {
     highest_list: { type: Array }, // 突破历史pv峰值时发送邮件列表
   }, { timestamps: true });
   ProjectSchema.index({ token: -1, user_id: -1 });
-
   return mongoose.model('Project', ProjectSchema);
 };

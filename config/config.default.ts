@@ -1,15 +1,21 @@
-import { EggAppConfig, EggAppInfo, PowerPartial } from 'egg';
+// tslint:disable-next-line:no-var-requires
 const path = require('path');
-require('dotenv').config({ path: (path.join(__dirname, 'bombay.config'))});
-declare const process : NodeJS.Process & { 
+import { EggAppConfig, EggAppInfo, PowerPartial } from 'egg';
+// tslint:disable-next-line:no-var-requires
+const dotenv = require('dotenv');
+dotenv.config({ path: path.join(__dirname, 'bombay.config') });
+
+declare const process: NodeJS.Process & {
   env: NodeJS.ProcessEnv & {
     MONGO_URI: string;
-    REDIS_CLUSTER: string
-  }
-}
+    REDIS_CLUSTER: string;
+  };
+};
 
-
-const { MONGO_URI, REDIS_CLUSTER } : {MONGO_URI?:string,REDIS_CLUSTER?:string}  = process.env;
+const {
+  MONGO_URI,
+  REDIS_CLUSTER,
+}: { MONGO_URI?: string; REDIS_CLUSTER?: string } = process.env;
 export default (appInfo: EggAppInfo) => {
   const config = {} as PowerPartial<EggAppConfig>;
   // override config from framework / plugin
@@ -17,16 +23,16 @@ export default (appInfo: EggAppInfo) => {
   config.keys = appInfo.name + '_1566973855378_2564';
 
   // add your egg config in here
-  config.middleware = [ 'errorHandler','reportWeb' ];
+  config.middleware = [ 'errorHandler', 'reportWeb' ];
   config.reportWeb = {
-    match: ['/api/v1/report/web']
-  }
+    match: [ '/api/v1/report/web' ],
+  };
   // mongodb 服务
   config.mongoose = {
     client: {
       url: MONGO_URI,
       options: {
-          poolSize: 20,
+        poolSize: 20,
       },
     },
   };
@@ -34,23 +40,19 @@ export default (appInfo: EggAppInfo) => {
   // redis配置
   config.redis = {
     client: {
-        port:  +REDIS_CLUSTER.split(':')[1], // Redis port
-        host: REDIS_CLUSTER.split(':')[0], // Redis host
-        password: '',
-        db: 0,
+      port: +REDIS_CLUSTER.split(':')[1], // Redis port
+      host: REDIS_CLUSTER.split(':')[0], // Redis host
+      password: '',
+      db: 0,
     },
   };
-  config.multipart={
-
-  }
   config.security = {
     domainWhiteList: [ 'http://127.0.0.1:18090' ],
     csrf: {
-        enable: false,
-        ignore: '/api/v1/report/**',
+      enable: false,
+      ignore: '/api/v1/report/**',
     },
   };
-
   config.cors = {
     origin: '*',
     allowMethods: 'GET,PUT,POST,DELETE,OPTIONS',
@@ -61,22 +63,25 @@ export default (appInfo: EggAppInfo) => {
     expiresIn: 60 * 60 * 12, // 12小时
   };
   config.bodyParser = {
-    enableTypes: ['json', 'form', 'text'],
+    enableTypes: [ 'json', 'form', 'text' ],
   };
   config.valparams = {
-    locale    : 'zh-cn',
+    locale: 'zh-cn',
     throwError: false,
   };
   config.multipart = {
     mode: 'file',
-    whitelist: [
-      '.png',
-    ],
+    whitelist: [ '.png' ],
   };
   // add your special config in here
   const bizConfig = {
     sourceUrl: `https://github.com/eggjs/examples/tree/master/${appInfo.name}`,
-    origin: [ 'http://127.0.0.1:7002', 'http://localhost:7002', 'http://localhost:8000', 'http://127.0.0.1:8000' ],
+    origin: [
+      'http://127.0.0.1:7002',
+      'http://localhost:7002',
+      'http://localhost:8000',
+      'http://127.0.0.1:8000',
+    ],
     user_pwd_salt_addition: 'BOMBAYJSUSERSALT',
     user_login_timeout: 60 * 60 * 24, // 用户登录态持续时间 1 天
     redis_consumption: {
@@ -90,7 +95,7 @@ export default (appInfo: EggAppInfo) => {
       total_limit_web: 10000,
       total_limit_wx: 10000,
     },
-    report_filter: [ 'page', 'county', 'ip', 'v', 'ct', ],
+    report_filter: [ 'page', 'county', 'ip', 'v', 'ct' ],
   };
 
   // the return config will combines to EggAppConfig

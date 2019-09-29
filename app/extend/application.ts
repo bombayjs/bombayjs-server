@@ -1,5 +1,5 @@
 
-module.exports =  {
+module.exports = {
     /* 生成随机字符串 */
     randomString(len?: number) {
         len = len || 7;

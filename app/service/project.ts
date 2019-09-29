@@ -16,7 +16,7 @@ export default class ProjectService extends Service {
     const type = query.type;
     // 参数校验
     ctx.validate(this.ProjectValidate);
-    if(ctx.paramErrors) {
+    if (ctx.paramErrors) {
       // get error infos from `ctx.paramErrors`;
       return this.app.retError(ctx.paramErrors[0].desc);
     }
@@ -79,7 +79,7 @@ export default class ProjectService extends Service {
     const result = await this.ctx.model.Project.update(
         { app_id: appId },
         update,
-        { multi: true }
+        { multi: true },
     ).exec();
     // 更新redis缓存
     this._updateProjectCache(appId);
@@ -217,11 +217,11 @@ export default class ProjectService extends Service {
       if (result === '{}') return JSON.parse(result);
       return result;
   }
-  async getProjectByToken(token){
-    let result:string = await this.app.redis.get(token)||'{}'
-    if(result === '{}'){
-      return await this.ctx.model.Project.findOne({ token }).exec()
-    }else{
+  async getProjectByToken(token) {
+    const result: string = await this.app.redis.get(token) || '{}';
+    if (result === '{}') {
+      return await this.ctx.model.Project.findOne({ token }).exec();
+    } else {
       return JSON.parse(result);
     }
   }

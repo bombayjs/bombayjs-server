@@ -6,7 +6,7 @@ module.exports = app => {
     ...Report,
     group: { type: String },
     key: { type: String },
-    val: {type: Number }
+    val: { type: Number },
   }, { timestamps: true });
   schema.index({ t: 1, page: 1 });
   schema.index({ page: 1 });

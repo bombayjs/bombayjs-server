@@ -7,6 +7,7 @@ import ExportUser from '../../../app/controller/user';
 import ExportWebError from '../../../app/controller/web/error';
 import ExportWebIndex from '../../../app/controller/web/index';
 import ExportWebReport from '../../../app/controller/web/report';
+import ExportWebRetcode from '../../../app/controller/web/retcode';
 import ExportWxIndex from '../../../app/controller/wx/index';
 
 declare module 'egg' {
@@ -17,6 +18,7 @@ declare module 'egg' {
       error: ExportWebError;
       index: ExportWebIndex;
       report: ExportWebReport;
+      retcode: ExportWebRetcode;
     }
     wx: {
       index: ExportWxIndex;
