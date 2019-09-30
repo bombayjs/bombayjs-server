@@ -10,16 +10,12 @@ export default {
   begin: { type: Number, default: 0 }, // 开始时间戳
   uid: { type: String }, // user id
   sid: { type: String }, // session id
-  dt: { type: String }, // document title
-  dl: { type: String }, // document location
-  dr: { type: String, alias: 'referer' }, // 来源
-  dpr: { type: Number, default: 0 }, // dpr
-  de: { type: String }, // document 编码
   sr: { type: String }, // 屏幕分辨率
   vp: { type: String }, // view 分辨率
   ul: { type: String }, // 语言
   ct: { type: String }, // 网络
   _v: { type: String }, // 脚本sdk版本
+  o: { type: String }, // 原始url
 
   browser: { type: String }, // 浏览器名称
   borwser_version: { type: String }, // 浏览器版本

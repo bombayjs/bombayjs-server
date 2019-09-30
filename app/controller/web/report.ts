@@ -15,6 +15,7 @@ export default class ReportController extends Controller {
     sr: { type: 'string', required: false }, // 屏幕分辨率
     vp: { type: 'string', required: false }, // view 分辨率
     _v: { type: 'string', required: false }, // 脚本sdk版本
+    o: { type: 'string', required: false }, // 原始url
     uid: { type: 'string', required: false }, // user id
     sid: { type: 'string', required: false }, // session id
     ct: { type: 'string', required: false }, // 网络
