@@ -4,13 +4,19 @@ export default class RetcodeController extends Controller {
   constructor(ctx) {
     super(ctx);
   }
-  // 获取不同类型数据 (分页/模糊)
+  // 数据处理
   public async list() {
     const { ctx, service: { web } } = this;
     // 组装参数
     const payload = ctx.request.body || {};
-     // 调用 Service 进行业务处理
-    const res = await web.retcode.list(payload);
+    let res = {};
+    const { metric } = payload;
+    // 界面统计
+    if (metric === 'webstat.url') {
+      res = await web.retcode.webstat(payload);
+    } else {
+      res = await web.retcode.list(payload);
+    }
     ctx.helper.success(res);
   }
 

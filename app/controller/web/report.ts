@@ -55,6 +55,7 @@ export default class ReportController extends Controller {
     bandwidth: { type: 'number', required: false }, //  估计的带宽 单位M/s
     navtype: { type: 'string', required: false }, //  nav方式 如reload
     fmp: { type: 'number', required: false }, // 停留时间
+    resTimes: { type: 'string', required: false },
   };
   // web用户数据上报
   public async create() {

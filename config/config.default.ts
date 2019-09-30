@@ -40,10 +40,13 @@ export default (appInfo: EggAppInfo) => {
   // redis配置
   config.redis = {
     client: {
-      port: +REDIS_CLUSTER.split(':')[1], // Redis port
-      host: REDIS_CLUSTER.split(':')[0], // Redis host
-      password: '',
-      db: 0,
+      cluster: true,
+      nodes: [{
+        port: +REDIS_CLUSTER.split(':')[1], // Redis port
+        host: REDIS_CLUSTER.split(':')[0], // Redis host
+        password: '',
+        db: 0,
+      }],
     },
   };
   config.security = {

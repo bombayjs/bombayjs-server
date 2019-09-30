@@ -6,11 +6,11 @@ module.exports = options => {
     const startTime = moment();
     const find = options.match.find(item => ctx.url.includes(item));
     if (find) {
-      const { err }: { err: object } = JSON.parse(ctx.request.body || '{}') || {};
+      const { err, res }: { err: object, res: string } = ctx.request.body || {};
       const ip = ctx.get('X-Real-IP') || ctx.get('X-Forwarded-For') || ctx.ip;
       const url = ctx.query.url || ctx.headers.referer;
       const user_agent = ctx.headers['user-agent'];
-      ctx.query = { ...ctx.query, ip, url, user_agent, ...err };
+      ctx.query = { ...ctx.query, ip, url, user_agent, ...err, resTimes: res };
     }
     await next();
     if (find) {

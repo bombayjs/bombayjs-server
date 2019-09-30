@@ -7,6 +7,7 @@ class RetCodeService extends Service {
   constructor(ctx: Context) {
     super(ctx);
   }
+  // 分页获取数据
   async list(payload) {
     const { start, end, query, token, currentPage, pageSize } = payload;
     const { ctx } = this;
@@ -16,7 +17,6 @@ class RetCodeService extends Service {
     let message: string = 'success';
     const params = ctx.helper.decode(query);
     const filterQuery = { ...params, createdAt: { $gte: moment(Number(start)).format('YYYY-MM-DD HH:mm:ss'), $lte: moment(Number(end)).format('YYYY-MM-DD HH:mm:ss') } };
-    console.dir(filterQuery);
     const { t } = params;
     const sort = { createdAt: -1 };
     const collectionName = `web_${t}_${token.toLowerCase()}`;
@@ -29,6 +29,21 @@ class RetCodeService extends Service {
       message = 'success';
     }
     return { data: { items: res, page: currentPage, pageSize, total }, code, message };
+  }
+
+  public async webstat(payload) {
+    console.dir(payload);
+    const { ctx } = this;
+    const { token } = payload;
+    const collectionName = `web_pv_${token.toLowerCase()}`;
+    // ctx.app.redis.set();
+    const model = await ctx.getModel(collectionName);
+    const res = await model.aggregate([
+      { $group: { _id : '$page', count: { $sum: 1 } } },
+      { $project: { _id : 0, page : '$_id', count: 1 } },
+      { $sort: { count : -1 } },
+      ]);
+    return res;
   }
 }
 
