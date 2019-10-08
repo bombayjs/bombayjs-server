@@ -4,6 +4,7 @@ module.exports = app => {
   const ProjectSchema = new mongoose.Schema({
     project_name: { type: String }, // 系统名称
     token: { type: String }, // 秘钥，唯一
+    url: { type: String }, // 网站url
     app_id: { type: String }, // 小程序appId标识
     type: { type: String, default: 'web' }, // 浏览器：web  微信小程序 ：wx
     // group_id: { type: Array }, // 应用所属分组ID

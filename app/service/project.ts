@@ -21,6 +21,7 @@ export default class ProjectService extends Service {
       return this.app.retError(ctx.paramErrors[0].desc);
     }
     if (!query.app_id && type === 'wx') return this.app.retError('新增项目信息操作：appId不能为空');
+    if (!query.url && type === 'web') return this.app.retError('新增项目信息操作：url不能为空');
 
     // 检验项目是否存在
     const search = await ctx.model.Project.findOne({ project_name: query.project_name, type: query.type }).exec();
@@ -32,6 +33,7 @@ export default class ProjectService extends Service {
     const project = ctx.model.Project();
     project.project_name = query.project_name;
     project.token = token;
+    project.url = query.url;
     project.type = query.type;
     project.app_id = query.app_id;
     project.user_id = [ ctx.currentUserId || '' ];
