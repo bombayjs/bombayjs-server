@@ -2,6 +2,7 @@
 // Do not modify this file!!!!!!!!!
 
 import 'egg';
+import ExportEventVariate from '../../../app/model/eventVariate';
 import ExportProject from '../../../app/model/project';
 import ExportResTime from '../../../app/model/resTime';
 import ExportUser from '../../../app/model/user';
@@ -21,6 +22,7 @@ import ExportWebWebSum from '../../../app/model/web/web_sum';
 
 declare module 'egg' {
   interface IModel {
+    EventVariate: ReturnType<typeof ExportEventVariate>;
     Project: ReturnType<typeof ExportProject>;
     ResTime: ReturnType<typeof ExportResTime>;
     User: ReturnType<typeof ExportUser>;

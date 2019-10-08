@@ -3,7 +3,7 @@ import { Application } from 'egg';
 module.exports = (app: Application) => {
     const apiV1Router = app.router.namespace('/api/v1');
     const { controller, middleware } = app;
-    const { user, project, web } = controller;
+    const { user, project, web, eventVariate, } = controller;
     // const tokenRequired = middleware.tokenRequired();
     const jwt = middleware.jwt();
     // 用户
@@ -34,6 +34,10 @@ module.exports = (app: Application) => {
     apiV1Router.post('/project/delete', jwt, project.deleteProject);
     // 日报邮件操作
     apiV1Router.post('/project/handleDaliyEmail', jwt, project.handleDaliyEmail);
+
+    // ----------------事件变量相关---------------
+    // 获取error
+    apiV1Router.post('/eventvariate/add', jwt, eventVariate.add);
 
     // ----------------web相关---------------
     // 获取error

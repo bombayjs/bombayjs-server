@@ -2,6 +2,7 @@
 // Do not modify this file!!!!!!!!!
 
 import 'egg';
+import ExportEventVariate from '../../../app/controller/eventVariate';
 import ExportProject from '../../../app/controller/project';
 import ExportUser from '../../../app/controller/user';
 import ExportWebError from '../../../app/controller/web/error';
@@ -12,6 +13,7 @@ import ExportWxIndex from '../../../app/controller/wx/index';
 
 declare module 'egg' {
   interface IController {
+    eventVariate: ExportEventVariate;
     project: ExportProject;
     user: ExportUser;
     web: {
