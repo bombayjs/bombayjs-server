@@ -79,7 +79,7 @@ export default class EventVariateService extends Service {
 
     variate.name = query.name;
     variate.marker = query.marker;
-    variate.is_use = query.is_use || 1;
+    variate.is_use = query.is_use === undefined ? 1 : query.is_use;
 
     const result = await variate.save();
     return this.app.retResult(result);
