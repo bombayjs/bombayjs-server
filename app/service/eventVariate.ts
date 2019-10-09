@@ -52,6 +52,39 @@ export default class EventVariateService extends Service {
     return this.app.retResult(result);
   }
 
+  async set() {
+    const { ctx } = this;
+    const query = ctx.request.body;
+
+    // 没有_id就是新增
+    if (!query._id) {
+      return this.add();
+    }
+
+    // 参数校验
+    ctx.validate(this.ProjectValidate);
+    if (ctx.paramErrors) {
+      // get error infos from `ctx.paramErrors`;
+      return this.app.retError(ctx.paramErrors[0].desc);
+    }
+    const variate = await ctx.model.EventVariate.findOne({ _id: query._id }).exec();
+    if (!variate) return this.app.retError('新增项目信息操作：事件不存在');
+
+    // 检验是否存在
+    let search = await ctx.model.EventVariate.findOne({ name: query.name, type: query.type, project_token: query.project_token }).exec();
+    if (search && search.id !== variate.id) return this.app.retError('新增项目信息操作：事件已存在1');
+
+    search = await ctx.model.EventVariate.findOne({ marker: query.marker, type: query.type, project_token: query.project_token }).exec();
+    if (search && search.id !== variate.id) return this.app.retError('新增项目信息操作：事件已存在2');
+
+    variate.name = query.name;
+    variate.marker = query.marker;
+    variate.is_use = query.is_use || 1;
+
+    const result = await variate.save();
+    return this.app.retResult(result);
+  }
+
   async list() {
     const { ctx } = this;
     const query = ctx.request.body;

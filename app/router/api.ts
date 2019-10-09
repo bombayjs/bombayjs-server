@@ -37,7 +37,8 @@ module.exports = (app: Application) => {
 
     // ----------------事件变量相关---------------
     // 获取error
-    apiV1Router.post('/eventvariate/add', jwt, eventVariate.add);
+    // apiV1Router.post('/eventvariate/add', jwt, eventVariate.add);
+    apiV1Router.post('/eventvariate/set', jwt, eventVariate.set);
     apiV1Router.post('/eventvariate/list', jwt, eventVariate.list);
 
     // ----------------web相关---------------
