@@ -1,7 +1,15 @@
 import { Service } from 'egg';
 
+interface Conditions {
+  user_id: string;
+  project_token: string;
+  name?: RegExp;
+  is_use?: 0 | 1;
+}
+
 export default class EventVariateService extends Service {
   ProjectValidate: any;
+  listValidate: any;
 
   constructor(props) {
     super(props);
@@ -11,6 +19,10 @@ export default class EventVariateService extends Service {
       marker: { type: 'string', required: true, trim: true, desc: '新增事件操作：事件标识符不能为空' },
       type: { type: 'string', required: true, trim: true, desc: '新增事件操作：事件类型不能为空' },
     };
+
+    this.listValidate = {
+      project_token: { type: 'string', required: true, trim: true, desc: '新增事件操作：请选择项目' },
+    }
   }
   async add(ctx) {
     const query = ctx.request.body;
@@ -33,6 +45,30 @@ export default class EventVariateService extends Service {
     variate.is_use = query.is_use || 1;
 
     const result = await variate.save();
+    return this.app.retResult(result);
+  }
+
+  async list() {
+    const { ctx } = this;
+    const query = ctx.request.body;
+    // 参数校验
+    ctx.validate(this.listValidate);
+    if (ctx.paramErrors) {
+      // get error infos from `ctx.paramErrors`;
+      return this.app.retError(ctx.paramErrors[0].desc);
+    }
+    const conditions: Conditions = {
+      user_id: ctx.currentUserId ,
+      project_token: query.project_token,
+    };
+
+    if (query.name) conditions.name = new RegExp(`.*${query.name}.*`);
+    if (query.is_use === 0 || query.is_use === 1) conditions.is_use = query.is_use;
+
+    const result = await ctx.model.EventVariate
+      .find(conditions)
+      .exec() || [];
+
     return this.app.retResult(result);
   }
 }
