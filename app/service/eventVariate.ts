@@ -24,7 +24,8 @@ export default class EventVariateService extends Service {
       project_token: { type: 'string', required: true, trim: true, desc: '新增事件操作：请选择项目' },
     }
   }
-  async add(ctx) {
+  async add() {
+    const { ctx } = this;
     const query = ctx.request.body;
     // 参数校验
     ctx.validate(this.ProjectValidate);
@@ -33,10 +34,13 @@ export default class EventVariateService extends Service {
       return this.app.retError(ctx.paramErrors[0].desc);
     }
     // 检验是否存在
-    const search = await ctx.model.EventVariate.findOne({ name: query.name, type: query.type }).exec();
+    let search = await ctx.model.EventVariate.findOne({ name: query.name, type: query.type }).exec();
     if (search) return this.app.retError('新增项目信息操作：事件已存在');
 
-    const variate = ctx.model.EventVariate();
+    search = await ctx.model.EventVariate.findOne({ marker: query.marker, type: query.type }).exec();
+    if (search) return this.app.retError('新增项目信息操作：事件已存在');
+
+    const variate = new ctx.model.EventVariate();
     variate.user_id = [ ctx.currentUserId || '' ];
     variate.project_token = query.project_token;
     variate.name = query.name;
