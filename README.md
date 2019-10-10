@@ -1,5 +1,16 @@
-# bombayjs-server
+# BOMBAYJS-SERVER
 
+此项目是bombayjs后台服务端
+
+采用eggjs + mongodb + redis + kafka + elk架构
+
+bombayjs是前端监控解决方案，包括bombayjs、bombayjs-server、bombayjs-admin三个项目
+
+项目地址：
+
+* https://github.com/bombayjs/bombayjs (web sdk)
+* https://github.com/bombayjs/bombayjs-server (服务端，用于提供api)
+* https://github.com/bombayjs/bombayjs-admin （后台管理系统，可视化数据等）
 
 ## QuickStart
 
