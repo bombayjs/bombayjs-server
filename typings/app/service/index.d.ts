@@ -3,7 +3,10 @@
 
 import 'egg';
 import ExportActionToken from '../../../app/service/actionToken';
+import ExportDimension from '../../../app/service/dimension';
 import ExportEventVariate from '../../../app/service/eventVariate';
+import ExportGroup from '../../../app/service/group';
+import ExportMeasure from '../../../app/service/measure';
 import ExportPageVariate from '../../../app/service/pageVariate';
 import ExportProject from '../../../app/service/project';
 import ExportUser from '../../../app/service/user';
@@ -15,7 +18,10 @@ import ExportWebRetcode from '../../../app/service/web/retcode';
 declare module 'egg' {
   interface IService {
     actionToken: ExportActionToken;
+    dimension: ExportDimension;
     eventVariate: ExportEventVariate;
+    group: ExportGroup;
+    measure: ExportMeasure;
     pageVariate: ExportPageVariate;
     project: ExportProject;
     user: ExportUser;

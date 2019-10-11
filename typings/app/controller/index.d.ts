@@ -2,7 +2,10 @@
 // Do not modify this file!!!!!!!!!
 
 import 'egg';
+import ExportDimension from '../../../app/controller/dimension';
 import ExportEventVariate from '../../../app/controller/eventVariate';
+import ExportGroup from '../../../app/controller/group';
+import ExportMeasure from '../../../app/controller/measure';
 import ExportPageVariate from '../../../app/controller/pageVariate';
 import ExportProject from '../../../app/controller/project';
 import ExportUser from '../../../app/controller/user';
@@ -14,7 +17,10 @@ import ExportWxIndex from '../../../app/controller/wx/index';
 
 declare module 'egg' {
   interface IController {
+    dimension: ExportDimension;
     eventVariate: ExportEventVariate;
+    group: ExportGroup;
+    measure: ExportMeasure;
     pageVariate: ExportPageVariate;
     project: ExportProject;
     user: ExportUser;

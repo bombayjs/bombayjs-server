@@ -3,7 +3,7 @@ import { Application } from 'egg';
 module.exports = (app: Application) => {
     const apiV1Router = app.router.namespace('/api/v1');
     const { controller, middleware } = app;
-    const { user, project, web, eventVariate, pageVariate, } = controller;
+    const { user, project, web, eventVariate, pageVariate, measure, dimension, group, } = controller;
     // const tokenRequired = middleware.tokenRequired();
     const jwt = middleware.jwt();
     // 用户
@@ -46,6 +46,15 @@ module.exports = (app: Application) => {
     apiV1Router.post('/pagevariate/set', jwt, pageVariate.set);
     apiV1Router.post('/pagevariate/delete', jwt, pageVariate.set);
     apiV1Router.post('/pagevariate/list', jwt, pageVariate.list);
+
+    // ----------------指标相关---------------
+    apiV1Router.post('/measure/get', jwt, measure.get);
+
+    // ----------------维度相关---------------
+    apiV1Router.post('/dimension/get', jwt, dimension.get);
+
+    // ----------------分群相关---------------
+    apiV1Router.post('/group/get', jwt, group.get);
 
     // ----------------web相关---------------
     // 获取error
