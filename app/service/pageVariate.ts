@@ -7,21 +7,20 @@ interface Conditions {
   is_use?: 0 | 1;
 }
 
-export default class EventVariateService extends Service {
+export default class PageVariateService extends Service {
   ProjectValidate: any;
   listValidate: any;
 
   constructor(props) {
     super(props);
     this.ProjectValidate = {
-      project_token: { type: 'string', required: true, trim: true, desc: '新增事件操作：请选择项目' },
-      name: { type: 'string', required: true, trim: true, desc: '新增事件操作：事件名称不能为空' },
-      marker: { type: 'string', required: true, trim: true, desc: '新增事件操作：事件标识符不能为空' },
-      type: { type: 'string', required: true, trim: true, desc: '新增事件操作：事件类型不能为空' },
+      project_token: { type: 'string', required: true, trim: true, desc: '请选择项目' },
+      name: { type: 'string', required: true, trim: true, desc: '页面名称不能为空' },
+      path: { type: 'string', required: true, trim: true, desc: '页面标识符不能为空' },
     };
 
     this.listValidate = {
-      project_token: { type: 'string', required: true, trim: true, desc: '新增事件操作：请选择项目' },
+      project_token: { type: 'string', required: true, trim: true, desc: '请选择项目' },
     }
   }
   async add() {
@@ -34,18 +33,17 @@ export default class EventVariateService extends Service {
       return this.app.retError(ctx.paramErrors[0].desc);
     }
     // 检验是否存在
-    let search = await ctx.model.EventVariate.findOne({ project_token: query.project_token, name: query.name, type: query.type }).exec();
-    if (search) return this.app.retError('新增项目信息操作：事件已存在');
+    let search = await ctx.model.PageVariate.findOne({ project_token: query.project_token, name: query.name }).exec();
+    if (search) return this.app.retError('页面已存在');
 
-    search = await ctx.model.EventVariate.findOne({ project_token: query.project_token, marker: query.marker, type: query.type }).exec();
-    if (search) return this.app.retError('新增项目信息操作：事件已存在');
+    search = await ctx.model.PageVariate.findOne({ project_token: query.project_token, path: query.path }).exec();
+    if (search) return this.app.retError('页面已存在');
 
-    const variate = new ctx.model.EventVariate();
+    const variate = new ctx.model.PageVariate();
     variate.user_id = [ ctx.currentUserId || '' ];
     variate.project_token = query.project_token;
     variate.name = query.name;
-    variate.marker = query.marker;
-    variate.type = query.type;
+    variate.path = query.path;
     variate.is_use = query.is_use || 1;
 
     const result = await variate.save();
@@ -67,11 +65,10 @@ export default class EventVariateService extends Service {
     };
     if (query._id) cond._id = query._id;
     if (query.name) cond.name = query.name;
-    if (query.marker) cond.marker = query.marker;
-    if (query.type) cond.type = query.type;
+    if (query.path) cond.path = query.path;
 
-    const result = await ctx.model.EventVariate.findOne(query).exec();
-    if (!result) return this.app.retError('事件不存在');
+    const result = await ctx.model.PageVariate.findOne(query).exec();
+    if (!result) return this.app.retError('页面不存在');
 
     return this.app.retResult(result);
   }
@@ -91,18 +88,18 @@ export default class EventVariateService extends Service {
       // get error infos from `ctx.paramErrors`;
       return this.app.retError(ctx.paramErrors[0].desc);
     }
-    const variate = await ctx.model.EventVariate.findOne({ _id: query._id }).exec();
-    if (!variate) return this.app.retError('新增项目信息操作：事件不存在');
+    const variate = await ctx.model.PageVariate.findOne({ _id: query._id }).exec();
+    if (!variate) return this.app.retError('页面不存在');
 
     // 检验是否存在
-    let search = await ctx.model.EventVariate.findOne({ name: query.name, type: query.type, project_token: query.project_token }).exec();
-    if (search && search.id !== variate.id) return this.app.retError('新增项目信息操作：事件已存在');
+    let search = await ctx.model.PageVariate.findOne({ project_token: query.project_token, name: query.name, }).exec();
+    if (search && search.id !== variate.id) return this.app.retError('页面已存在');
 
-    search = await ctx.model.EventVariate.findOne({ marker: query.marker, type: query.type, project_token: query.project_token }).exec();
-    if (search && search.id !== variate.id) return this.app.retError('新增项目信息操作：事件已存在');
+    search = await ctx.model.PageVariate.findOne({ project_token: query.project_token, path: query.path, }).exec();
+    if (search && search.id !== variate.id) return this.app.retError('页面已存在');
 
     variate.name = query.name;
-    variate.marker = query.marker;
+    variate.path = query.path;
     variate.is_use = query.is_use === undefined ? 1 : query.is_use;
 
     const result = await variate.save();
@@ -126,7 +123,7 @@ export default class EventVariateService extends Service {
     if (query.name) conditions.name = new RegExp(`.*${query.name}.*`);
     if (query.is_use === 0 || query.is_use === 1) conditions.is_use = query.is_use;
 
-    const result = await ctx.model.EventVariate
+    const result = await ctx.model.PageVariate
       .find(conditions)
       .exec() || [];
 

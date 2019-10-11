@@ -4,6 +4,7 @@
 import 'egg';
 import ExportActionToken from '../../../app/service/actionToken';
 import ExportEventVariate from '../../../app/service/eventVariate';
+import ExportPageVariate from '../../../app/service/pageVariate';
 import ExportProject from '../../../app/service/project';
 import ExportUser from '../../../app/service/user';
 import ExportWebBase from '../../../app/service/web/base';
@@ -15,6 +16,7 @@ declare module 'egg' {
   interface IService {
     actionToken: ExportActionToken;
     eventVariate: ExportEventVariate;
+    pageVariate: ExportPageVariate;
     project: ExportProject;
     user: ExportUser;
     web: {

@@ -5,6 +5,10 @@ export default class EventVariateController extends Controller {
   //   const { ctx } = this;
   //   ctx.body = await ctx.service.eventVariate.add();
   // }
+  async get() {
+    const { ctx } = this;
+    ctx.body = await ctx.service.eventVariate.get();
+  }
 
   async set() {
     const { ctx } = this;
