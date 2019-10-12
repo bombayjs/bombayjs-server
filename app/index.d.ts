@@ -8,7 +8,7 @@ declare module 'egg' {
     retError:(errorMsg?: string, errorCode?: number, data?: {})=> void;
     randomString:(len?:number)=> void;
     retResult:(data: any, msg?: string, code?: number)=> void;
-    
+    elasticsearch:any
   }
 
   interface Context {

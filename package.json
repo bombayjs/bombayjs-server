@@ -36,7 +36,11 @@
     "dotenv":"^7.0.0",
     "egg-validate": "^2.0.2",
     "moment": "^2.24.0",
-    "egg-multipart": "^2.9.0"
+    "egg-multipart": "^2.9.0",
+    "egg-kafka-node": "^1.0.4",
+    "@elastic/elasticsearch": "^7.4.0",
+    "elasticsearch": "^16.4.0",
+    "koa-is-json": "^1.0.0"
   },
   "devDependencies": {
     "@types/mocha": "^2.2.40",

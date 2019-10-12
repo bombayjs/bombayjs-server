@@ -1,5 +1,10 @@
 import { Controller } from 'egg';
-
+// frontend-event-log-web-report-collect-*
+// interface Ibody {
+//   res?: any;
+//   err?: any;
+//   token?: string;
+// }
 export default class ReportController extends Controller {
   constructor(ctx) {
     super(ctx);
@@ -58,21 +63,45 @@ export default class ReportController extends Controller {
     fmp: { type: 'number', required: false }, // 停留时间
     resTimes: { type: 'string', required: false },
   };
-  // web用户数据上报
+  /**
+   * *******************************************************************************************
+   * web用户数据上报保存到kafka
+   * *******************************************************************************************
+   */
   public async create() {
-    console.dir('crate');
     const { ctx, service } = this;
-    // 校验参数
-    ctx.validate(this.VReport, ctx.query);
-    const { token } = ctx.query;
+    const body = this.adapterBody();
+    ctx.validate(this.VReport, body);
+    const { token } = body;
     if (token) {
       const tokenObj = await this.service.project.getProjectByToken(token);
-      if (tokenObj.is_use === 1) {
+      if (tokenObj && tokenObj.is_use === 1) {
         const { report } = service.web;
-        await report.save(ctx.query);
+        await report.save(body);
       }
     }
     ctx.helper.success();
+  }
+  /**
+   * *******************************************************************************************
+   * 组装上报参数
+   * *******************************************************************************************
+   */
+  public adapterBody() {
+    const { ctx } = this;
+    // let body: Ibody = ctx.request.body;
+    // console.dir(body);
+    // if (body && typeof body === 'string') {
+    //   body = JSON.parse(body);
+    // }
+    // if (typeof body.res === 'string') {
+    //   const res = JSON.parse(body.res);
+    //   body = { ...body, res };
+    // }
+    const ip = ctx.get('X-Real-IP') || ctx.get('X-Forwarded-For') || ctx.ip;
+    const url = ctx.url || ctx.headers.referer;
+    const user_agent = ctx.headers['user-agent'];
+    return { ...ctx.query, ip, url, pv: 1, uv: ip, user_agent, '@timestamp' : new Date() };
   }
   // 通过redis 消息队列消费数据
   async saveWebReportDataForRedis(query) {

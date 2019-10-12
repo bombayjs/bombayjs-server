@@ -15,18 +15,20 @@ declare const process: NodeJS.Process & {
 const {
   MONGO_URI,
   REDIS_CLUSTER,
-}: { MONGO_URI?: string; REDIS_CLUSTER?: string } = process.env;
+  ELASTICSEARCH_CLUSTER,
+  HOST_API,
+}: { MONGO_URI?: string, REDIS_CLUSTER?: string, ELASTICSEARCH_CLUSTER?: string, HOST_API?: string } = process.env;
 export default (appInfo: EggAppInfo) => {
   const config = {} as PowerPartial<EggAppConfig>;
   // override config from framework / plugin
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1566973855378_2564';
-
+  config.kafkaSubmit = `${HOST_API}/public-open/event/log/submit`;
   // add your egg config in here
-  config.middleware = [ 'errorHandler', 'reportWeb' ];
-  config.reportWeb = {
-    match: [ '/api/v1/report/web' ],
-  };
+  config.middleware = [ 'errorHandler' ];
+  // config.reportWeb = {
+  //   match: [ '/api/v1/report/web' ],
+  // };
   // mongodb 服务
   config.mongoose = {
     client: {
@@ -60,7 +62,6 @@ export default (appInfo: EggAppInfo) => {
     origin: '*',
     allowMethods: 'GET,PUT,POST,DELETE,OPTIONS',
   };
-
   config.jwt = {
     secret: 'igola2019',
     expiresIn: 60 * 60 * 12, // 12小时
@@ -72,9 +73,36 @@ export default (appInfo: EggAppInfo) => {
     locale: 'zh-cn',
     throwError: false,
   };
-  config.multipart = {
-    mode: 'file',
-    whitelist: [ '.png' ],
+  // config.kafkaNode = {
+  //   kafkaHost: `${KAFKA_CLUSTER}`,
+  //   clientOption: {}, // KafkaClient option, more documentation please visit kafka-node
+  //   // 消费者配置
+  //   consumerOption: [{
+  //     groupId: 'group1', // consumerGroup's groupId
+  //     topics: [ 'reportTopic' ], // topics under the same consumer group
+  //     options: {
+  //       fetchMaxWaitMs: 100,
+  //       fetchMinBytes: 1,
+  //       fetchMaxBytes: 1024 * 1024,
+  //   }, // 每个消费组对应的相关 consumerGroup 配置
+  //   }],
+  //   // 生产者配置
+  //   producerOption: {
+  //     requireAcks: 1,
+  //     ackTimeoutMs: 100,
+  //     partitionerType: 2,
+  //     autoCreateTopic: true, // 是否开启自动创建 topic功能
+  //     topics: [ 'reportTopic' ], // 所有消费组需要包含的topics 集合
+  //   },
+  //   messageOption: {
+  //     partition: 0,
+  //     attributes: 0, // send message option
+  //   },
+  // };
+  config.elasticsearch = {
+    client: {
+      node: ELASTICSEARCH_CLUSTER,
+    },
   };
   // add your special config in here
   const bizConfig = {

@@ -62,3 +62,20 @@ $ npm start
 
 
 **wx api**
+
+
+
+### kafka -- mac
+安装
+brew install kafka
+启动zookeeper
+zookeeper-server-start /usr/local/etc/kafka/zookeeper.properties 
+启动kafka
+kafka-server-start /usr/local/etc/kafka/server.properties 
+
+### elasticsearch  Kibana
+安装：
+  https://www.elastic.co/guide/cn/elasticsearch/guide/cn/running-elasticsearch.html
+启动 
+  ./bin/elasticsearch
+  ./bin/kibana

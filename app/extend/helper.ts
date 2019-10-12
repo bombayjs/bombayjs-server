@@ -26,7 +26,12 @@ module.exports = {
     return obj;
   },
   success(res) {
-    this.ctx.body = res;
+    this.ctx.body = {
+      data: res,
+      code: 200,
+      message: 'success',
+      success: true,
+    };
     this.ctx.status = 200;
   },
 };
