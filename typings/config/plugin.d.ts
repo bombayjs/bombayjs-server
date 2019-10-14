@@ -20,6 +20,7 @@ import 'egg-redis';
 import 'egg-cors';
 import 'egg-router-plus';
 import 'egg-valparams';
+import '@switchdog/egg-graphql';
 import { EggPluginItem } from 'egg';
 declare module 'egg' {
   interface EggPlugin {
@@ -41,5 +42,6 @@ declare module 'egg' {
     cors?: EggPluginItem;
     routerPlus?: EggPluginItem;
     valparams?: EggPluginItem;
+    graphql?: EggPluginItem;
   }
 }

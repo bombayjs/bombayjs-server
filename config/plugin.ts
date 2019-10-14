@@ -36,6 +36,10 @@ const plugin: EggPlugin = {
     enable: true,
     path: path.join(__dirname, '../lib/plugin/egg-elasticsearch'),
   },
+  graphql: {
+    enable: true,
+    package: '@switchdog/egg-graphql',
+  },
 };
 
 export default plugin;

@@ -1,0 +1,4 @@
+type Mutation {
+  # Item
+  addUser (name: String!): User
+}

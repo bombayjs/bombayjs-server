@@ -25,10 +25,11 @@ export default (appInfo: EggAppInfo) => {
   config.keys = appInfo.name + '_1566973855378_2564';
   config.kafkaSubmit = `${HOST_API}/public-open/event/log/submit`;
   // add your egg config in here
-  config.middleware = [ 'errorHandler' ];
+  config.middleware = [ 'graphql', 'errorHandler' ];
   // config.reportWeb = {
   //   match: [ '/api/v1/report/web' ],
   // };
+
   // mongodb 服务
   config.mongoose = {
     client: {
@@ -103,6 +104,17 @@ export default (appInfo: EggAppInfo) => {
     client: {
       node: ELASTICSEARCH_CLUSTER,
     },
+  };
+  config.graphql = {
+    router: '/graphql',
+    // 是否加载到 app 上，默认开启
+    app: true,
+    // 是否加载到 agent 上，默认关闭
+    agent: false,
+    // 是否加载开发者工具 graphiql, 默认开启。路由同 router 字段。使用浏览器打开该可见。
+    graphiql: true,
+    // 是否设置默认的Query和Mutation, 默认关闭
+    defaultEmptySchema:false,
   };
   // add your special config in here
   const bizConfig = {
