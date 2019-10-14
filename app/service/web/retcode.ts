@@ -84,8 +84,9 @@ class RetCodeService extends Service {
       const temp: {pv?: number; uv?: number} = {};
       temp[name] = b.key;
       measures.map(item => {
-        if (item === 'pv' || item === 'uv') {
+        if (item === 'pv' || item === 'uv' || item === 'count') {
           temp[item] = b[item].value;
+          if (item === 'count') temp[item] = b.doc_count;
         } else {
           temp[item] = b[item].buckets;
         }
@@ -111,8 +112,9 @@ class RetCodeService extends Service {
       temp.date = b.key;
       temp.format = b.key_as_string;
       measures.map(item => {
-        if (item === 'pv' || item === 'uv') {
+        if (item === 'pv' || item === 'uv' || item === 'count') {
           temp[item] = b[item].value;
+          if (item === 'count') temp[item] = b.doc_count;
         } else {
           temp[item] = b[item].buckets;
         }

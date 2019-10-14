@@ -17,13 +17,17 @@ const {
   REDIS_CLUSTER,
   ELASTICSEARCH_CLUSTER,
   HOST_API,
-}: { MONGO_URI?: string, REDIS_CLUSTER?: string, ELASTICSEARCH_CLUSTER?: string, HOST_API?: string } = process.env;
+  MAP_API,
+  MAP_KEY,
+}: { MONGO_URI?: string, REDIS_CLUSTER?: string, ELASTICSEARCH_CLUSTER?: string, HOST_API?: string, MAP_API?: string, MAP_KEY?: string } = process.env;
 export default (appInfo: EggAppInfo) => {
   const config = {} as PowerPartial<EggAppConfig>;
   // override config from framework / plugin
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1566973855378_2564';
   config.kafkaSubmit = `${HOST_API}/public-open/event/log/submit`;
+  config.mapApi = `${MAP_API}/ws/location/v1/ip`;
+  config.mapKey = MAP_KEY;
   // add your egg config in here
   config.middleware = [ 'graphql', 'errorHandler' ];
   // config.reportWeb = {
