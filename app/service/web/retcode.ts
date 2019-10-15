@@ -35,7 +35,7 @@ class RetCodeService extends Service {
       aggs: aggsQuery,
     };
     const res = await this.esSearch(body);
-    return this.dimensionRes(res, dimensions, measures);
+    return this.dimensionRes(res.body, dimensions, measures);
   }
   /**
    * ************************************************************************************************
@@ -43,7 +43,7 @@ class RetCodeService extends Service {
    * @param payload
    * ************************************************************************************************
    */
-  public async indicator(payload) {
+  async indicator(payload) {
     const { filters, startTime, endTime, intervalMillis, measures } = payload;
     const filterParams = this.filterParams(filters);
     const aggsQuery = this.aggsIndicatorQuery(measures, intervalMillis);
@@ -65,7 +65,7 @@ class RetCodeService extends Service {
       aggs: aggsQuery,
     };
     const res = await this.esSearch(body);
-    return this.indicatorRes(res, measures);
+    return this.indicatorRes(res.body, measures);
   }
   /**
    * *******************************************************************************************
