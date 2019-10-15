@@ -1,6 +1,5 @@
-// tslint:disable-next-line:no-var-requires
-const path = require('path');
 import { EggPlugin } from 'egg';
+const path = require('path');
 
 const plugin: EggPlugin = {
   static: true,

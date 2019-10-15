@@ -9,7 +9,7 @@
     "egg-elasticsearch"
   ],
   "dependencies": {
-    "@elastic/elasticsearch": "^7.4.0"
+    "elasticsearch": "^16.4.0"
   },
   "devDependencies": {
     "autod": "^3.0.1",

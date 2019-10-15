@@ -45,7 +45,7 @@ class ReportService extends Service {
     if (isExist) {
       return this.getLocationToEs(ip);
     } else {
-      return this.saveLocationToEs();
+      return { location: { lng: null, lat: null, }, ad_info: { nation: null, province: null, city: null, adcode: 0, }, };
     }
   }
   /**
@@ -53,13 +53,14 @@ class ReportService extends Service {
    * @param ip
    */
   public async getLocationToEs(ip) {
+    const ipl = this.ctx.helper.subIp(ip);
     const res = await this.app.elasticsearch.search({
       index: 'frontend-event-log-web-report-location',
       type: '_doc',
       body: {
         query: {
           match: {
-            ip,
+            ip: ipl,
           },
         },
       },
@@ -68,50 +69,8 @@ class ReportService extends Service {
       const { location, ad_info } = res.hits.hits[0]._source;
       return { location, ad_info };
     } else {
-      return this.saveLocationToEs();
+      return { location: { lng: null, lat: null, }, ad_info: { nation: null, province: null, city: null, adcode: 0, }, };
     }
-  }
-  /**
-   * *******************************************************************************************
-   * 保存地理信息到es
-   * 1. 调取腾讯接口获取地理信息
-   * 2. 保存返回地理信息到es
-   * @param ip ip地址
-   * @returns 返回国家信息
-   * *******************************************************************************************
-   */
-  public async saveLocationToEs() {
-    // const res = await this.app.curl(this.app.config.mapApi, {
-    //   dataType: 'json',
-    //   method: 'GET',
-    //   contentType: 'json',
-    //   dataAsQueryString: true,
-    //   data: {
-    //     ip,
-    //     key: this.app.config.mapKey,
-    //   },
-    // });
-    // const { status, result }: { status: number, result: {ad_info: { nation: string }, location: object}} = res.data;
-    // if (status === 0) {
-    //    return await this.app.elasticsearch.index({
-    //     index: 'frontend-event-log-web-report-location',
-    //     type: '_doc',
-    //     body: result,
-    //   });
-    // }
-    // return {  location: result.location, ad_info: result.ad_info };
-    return {
-      location: {
-        lng: null,
-        lat: null,
-      },
-      ad_info: {
-        nation: null,
-        province: null,
-        city: null,
-        adcode: 0,
-      },
-    };
   }
   /**
    * 本地测试使用,发布后删除

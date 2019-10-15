@@ -40,7 +40,7 @@
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",
     "egg-kafka-node": "^1.0.4",
-    "@elastic/elasticsearch": "^7.4.0",
+    "elasticsearch": "^16.4.0",
     "koa-is-json": "^1.0.0",
     "mongoose-schema-extend": "^0.2.2"
   },

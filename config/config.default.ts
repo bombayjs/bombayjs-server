@@ -106,7 +106,9 @@ export default (appInfo: EggAppInfo) => {
   // };
   config.elasticsearch = {
     client: {
-      node: ELASTICSEARCH_CLUSTER,
+      host: ELASTICSEARCH_CLUSTER,
+      // log: 'trace',
+      apiVersion: '7.4',
     },
   };
   config.graphql = {
@@ -118,7 +120,7 @@ export default (appInfo: EggAppInfo) => {
     // 是否加载开发者工具 graphiql, 默认开启。路由同 router 字段。使用浏览器打开该可见。
     graphiql: true,
     // 是否设置默认的Query和Mutation, 默认关闭
-    defaultEmptySchema:false,
+    defaultEmptySchema: false,
   };
   // add your special config in here
   const bizConfig = {

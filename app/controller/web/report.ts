@@ -98,9 +98,8 @@ export default class ReportController extends Controller {
     //   const res = JSON.parse(body.res);
     //   body = { ...body, res };
     // }
-    const ip = '61.140.125.128'; // ctx.get('X-Real-IP') || ctx.get('X-Forwarded-For') || ctx.ip;
+    const ip = '182.239.155.222'; // ctx.get('X-Real-IP') || ctx.get('X-Forwarded-For') || ctx.ip;
     const location = await service.web.report.getLocation(ip);
-    console.dir(location);
     // const url = ctx.url || ctx.headers.referer;
     const user_agent = ctx.headers['user-agent'];
     return { ...ctx.query, ...location, ip, pv: 1, uv: ip, user_agent, '@timestamp' : new Date() };

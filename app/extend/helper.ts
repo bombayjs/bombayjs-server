@@ -1,5 +1,14 @@
 module.exports = {
   /**
+   * 截取ip前三位
+   * @param ip
+   *
+   */
+  subIp(ip) {
+    const ips = ip.split('.');
+    return `${ips[0]}.${ips[1]}.${ips[2]}`;
+  },
+  /**
    * 将字符串首字母转成大写
    * @param param0  需要转换的字符串
    * @param lowerRest false 首字母大写，其他不变   true 首字母大写，其他都小写

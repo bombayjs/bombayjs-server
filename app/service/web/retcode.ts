@@ -35,7 +35,7 @@ class RetCodeService extends Service {
       aggs: aggsQuery,
     };
     const res = await this.esSearch(body);
-    return this.dimensionRes(res.body, dimensions, measures);
+    return this.dimensionRes(res, dimensions, measures);
   }
   /**
    * ************************************************************************************************
@@ -65,7 +65,7 @@ class RetCodeService extends Service {
       aggs: aggsQuery,
     };
     const res = await this.esSearch(body);
-    return this.indicatorRes(res.body, measures);
+    return this.indicatorRes(res, measures);
   }
   /**
    * *******************************************************************************************
