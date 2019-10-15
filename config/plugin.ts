@@ -1,5 +1,4 @@
 import { EggPlugin } from 'egg';
-const path = require('path');
 
 const plugin: EggPlugin = {
   static: true,
@@ -33,7 +32,7 @@ const plugin: EggPlugin = {
   // },
   elasticsearch : {
     enable: true,
-    path: path.join(__dirname, '../lib/plugin/egg-elasticsearch'),
+    package: 'egg-esearch',
   },
   graphql: {
     enable: true,
