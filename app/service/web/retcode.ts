@@ -80,6 +80,7 @@ class RetCodeService extends Service {
     let total: number = 0;                                                      // 返回结果总和
     const data: any[] = [];                                                  // 查询数据
     const name = dimensions[0];
+    if (!res.aggregations) return { data: [], total: 0 };
     res.aggregations[name].buckets.map(b => {
       const temp: {pv?: number; uv?: number} = {};
       temp[name] = b.key;
@@ -107,6 +108,7 @@ class RetCodeService extends Service {
   public indicatorRes(res, measures) {
     let total: number = 0;                                                      // 返回结果总和
     const data: any[] = [];                                                  // 查询数据
+    if (!res.aggregations) return { data: [], total: 0 };
     res.aggregations.indicator.buckets.map(b => {
       const temp: {pv?: number; uv?: number; date?: number; format?: string} = {};
       temp.date = b.key;
