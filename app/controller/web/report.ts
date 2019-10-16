@@ -65,6 +65,7 @@ export default class ReportController extends Controller {
     fmp: { type: 'number', required: false }, // 停留时间
     resTimes: { type: 'string', required: false },
   };
+  public toNumberParas = [ 'times', 'begin', 'dpr', 'line', 'col', 'dom', 'load', 'time', 'code', 'healthy', 'stay', 'errcount', 'apisucc', 'apifail', 'dns', 'tcp', 'ssl', 'ttfb', 'trans', 'firstbyte', 'fpt', 'tti', 'ready', 'bandwidth', 'fmp' ];
   /**
    * *******************************************************************************************
    * web用户数据上报保存到kafka
@@ -100,6 +101,11 @@ export default class ReportController extends Controller {
     //   const res = JSON.parse(body.res);
     //   body = { ...body, res };
     // }
+    this.toNumberParas.map(item => {
+      if (ctx.query[item]) {
+        ctx.query[item] = +ctx.query[item];
+      }
+    });
     const ip = '122.100.218.86'; // ctx.get('X-Real-IP') || ctx.get('X-Forwarded-For') || ctx.ip;
     const location = await service.web.report.getLocation(ip);
     // const url = ctx.url || ctx.headers.referer;
