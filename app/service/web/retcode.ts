@@ -111,7 +111,6 @@ class RetCodeService extends Service {
     let total: number = 0;                                                      // 返回结果总和
     const data: any[] = [];                                                  // 查询数据
     if (!res.aggregations || res.aggregations.indicator.buckets.length === 0) return { data: [], total: 0 };
-    console.dir(res.aggregations.indicator.buckets);
     res.aggregations.indicator.buckets.map(b => {
       const temp: {pv?: number; uv?: number; date?: number; format?: string} = {};
       temp.date = b.key;
@@ -130,7 +129,6 @@ class RetCodeService extends Service {
     const leftArray: object[] = [];
     const rightArray: object[] = [];
     // 左补全
-    console.dir(data);
     if (data[0].date > startTime) {
       const diff: any = (data[0].date - startTime) / intervalMillis;
       const fillData: any = {};
@@ -138,7 +136,6 @@ class RetCodeService extends Service {
         fillData[item] = 0;
       });
       Array(Number.parseInt(diff)).fill(1).map((_item, index) => {
-        console.dir(index);
         const currentDate = data[0].date + index * intervalMillis;
         const formatDate = moment(currentDate).format('YYYY-MM-DD hh:mm:ss');
         fillData.date = currentDate;
