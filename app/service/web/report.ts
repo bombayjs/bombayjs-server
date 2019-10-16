@@ -67,6 +67,9 @@ class ReportService extends Service {
     });
     if (res.hits.hits.length > 0) {
       const { location, ad_info } = res.hits.hits[0]._source;
+      if (ad_info.nation === '中国' && (ad_info.province === '香港特别行政区' || ad_info.province === '台湾省' || ad_info.province === '澳门特别行政区')) {
+        ad_info.nation = `${ad_info.nation}${ad_info.province}`;
+      }
       return { location, ad_info };
     } else {
       return { location: { lng: null, lat: null, }, ad_info: { nation: null, province: null, city: null, adcode: 0, }, };

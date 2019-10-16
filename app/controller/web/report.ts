@@ -1,4 +1,6 @@
 import { Controller } from 'egg';
+// tslint:disable-next-line:no-var-requires
+const detector = require('detector');
 // frontend-event-log-web-report-collect-*
 // interface Ibody {
 //   res?: any;
@@ -98,11 +100,12 @@ export default class ReportController extends Controller {
     //   const res = JSON.parse(body.res);
     //   body = { ...body, res };
     // }
-    const ip = '182.239.155.222'; // ctx.get('X-Real-IP') || ctx.get('X-Forwarded-For') || ctx.ip;
+    const ip = '122.100.218.86'; // ctx.get('X-Real-IP') || ctx.get('X-Forwarded-For') || ctx.ip;
     const location = await service.web.report.getLocation(ip);
     // const url = ctx.url || ctx.headers.referer;
     const user_agent = ctx.headers['user-agent'];
-    return { ...ctx.query, ...location, ip, pv: 1, uv: ip, user_agent, '@timestamp' : new Date() };
+    const device = detector.parse(user_agent);
+    return { ...ctx.query, detector: device, ...location, ip, pv: 1, uv: ip, user_agent, '@timestamp' : new Date() };
   }
   // 通过redis 消息队列消费数据
   async saveWebReportDataForRedis(query) {

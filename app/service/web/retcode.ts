@@ -178,11 +178,20 @@ class RetCodeService extends Service {
           }};
         }
       } else {
-        aggs[item] = {
-          terms: {
-            field: `${item}.keyword`,
-          },
-        };
+        if (item.includes('_')) {
+          const values = item.split('_');
+          aggs[item] = {
+            [values[0]] : {
+              field: `${values[1]}`,
+            },
+          };
+        } else {
+          aggs[item] = {
+            terms: {
+              field: `${item}.keyword`,
+            },
+          };
+        }
       }
     });
     aggsQuery[name] = {
@@ -218,11 +227,20 @@ class RetCodeService extends Service {
           }};
         }
       } else {
-        aggs[item] = {
-          terms: {
-            field: `${item}.keyword`,
-          },
-        };
+        if (item.includes('_')) {
+          const values = item.split('_');
+          aggs[item] = {
+            [values[0]] : {
+              field: `${values[1]}`,
+            },
+          };
+        } else {
+          aggs[item] = {
+            terms: {
+              field: `${item}.keyword`,
+            },
+          };
+        }
       }
     });
     const aggsQuery = {
