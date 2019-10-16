@@ -65,7 +65,7 @@ class RetCodeService extends Service {
       aggs: aggsQuery,
     };
     const res = await this.esSearch(body);
-    return this.indicatorRes(res, measures);
+    return this.indicatorRes({ res, payload });
   }
   /**
    * *******************************************************************************************
@@ -86,7 +86,8 @@ class RetCodeService extends Service {
       temp[name] = b.key;
       measures.map(item => {
         if (b[item].buckets) {
-          temp[item] = b[item].buckets;
+          if (item === 'count') temp[item] = b.doc_count;
+          else temp[item] = b[item].buckets;
         } else {
           temp[item] = b[item].value || 0;
           if (item === 'count') temp[item] = b.doc_count;
@@ -105,7 +106,8 @@ class RetCodeService extends Service {
    * @returns object  返回结果
    * *******************************************************************************************
    */
-  public indicatorRes(res, measures) {
+  public indicatorRes(params) {
+    const { payload: { measures, startTime, endTime, intervalMillis }, res } = params;
     let total: number = 0;                                                      // 返回结果总和
     const data: any[] = [];                                                  // 查询数据
     if (!res.aggregations) return { data: [], total: 0 };
@@ -115,16 +117,50 @@ class RetCodeService extends Service {
       temp.format = b.key_as_string;
       measures.map(item => {
         if (b[item].buckets) {
-          temp[item] = b[item].buckets;
+          if (item === 'count') temp[item] = b.doc_count;
+          else temp[item] = b[item].buckets;
         } else {
           temp[item] = b[item].value || 0;
-          if (item === 'count') temp[item] = b.doc_count;
         }
       });
       data.push(temp);
       total += b.doc_count;
     });
-    return { data, total, };
+    const leftArray: object[] = [];
+    const rightArray: object[] = [];
+    // 左补全
+    if (data[0].date > startTime) {
+      const diff: any = (data[0].date - startTime) / intervalMillis;
+      const fillData: any = {};
+      measures.map(item => {
+        fillData[item] = 0;
+      });
+      Array(Number.parseInt(diff)).fill(1).map((_item, index) => {
+        console.dir(index);
+        const currentDate = data[0].date + index * intervalMillis;
+        const formatDate = moment(currentDate).format('YYYY-MM-DD hh:mm:ss');
+        fillData.date = currentDate;
+        fillData.format = formatDate;
+        leftArray.push(fillData);
+      });
+    }
+    // 右补全
+    if (data[data.length - 1].date < endTime) {
+      const diff: any = (endTime - data[data.length - 1].date) / intervalMillis;
+      const fillData: any = {};
+      measures.map(item => {
+        fillData[item] = 0;
+      });
+      Array(Number.parseInt(diff)).fill(1).map((_item, index) => {
+        const currentDate = data[data.length - 1].date + index * intervalMillis;
+        const formatDate = moment(currentDate).format('YYYY-MM-DD hh:mm:ss');
+        fillData.date = currentDate;
+        fillData.format = formatDate;
+        rightArray.push(fillData);
+      });
+    }
+    const allData = [ ...leftArray, ...data, ...rightArray ];
+    return { allData, total, };
   }
   /**
    * *******************************************************************************************
@@ -249,6 +285,7 @@ class RetCodeService extends Service {
           field : '@timestamp',
           interval: intervalMillis,
           format: 'yyyy-MM-dd hh:mm:ss',
+          min_doc_count : 0,
         },
         aggs,
       },
