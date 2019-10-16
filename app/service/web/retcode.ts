@@ -172,7 +172,7 @@ class RetCodeService extends Service {
         fillData[item] = 0;
       });
       Array(Number.parseInt(diff)).fill(1).map((_item, index) => {
-        const currentDate = data[0].date + index * intervalMillis;
+        const currentDate = startTime + index * intervalMillis;
         const formatDate = moment(currentDate).format('YYYY-MM-DD hh:mm:ss');
         leftArray.push({ ...fillData, date: currentDate, format: formatDate });
       });
