@@ -80,7 +80,7 @@ class RetCodeService extends Service {
     let total: number = 0;                                                      // 返回结果总和
     const data: any[] = [];                                                  // 查询数据
     const name = dimensions[0];
-    if (!res.aggregations) return { data: [], total: 0 };
+    if (!res.aggregations || res.aggregations[name].buckets.length === 0) return { data: [], total: 0 };
     res.aggregations[name].buckets.map(b => {
       const temp: {pv?: number; uv?: number} = {};
       temp[name] = b.key;
@@ -110,7 +110,8 @@ class RetCodeService extends Service {
     const { payload: { measures, startTime, endTime, intervalMillis }, res } = params;
     let total: number = 0;                                                      // 返回结果总和
     const data: any[] = [];                                                  // 查询数据
-    if (!res.aggregations) return { data: [], total: 0 };
+    if (!res.aggregations || res.aggregations.indicator.buckets.length === 0) return { data: [], total: 0 };
+    console.dir(res.aggregations.indicator.buckets);
     res.aggregations.indicator.buckets.map(b => {
       const temp: {pv?: number; uv?: number; date?: number; format?: string} = {};
       temp.date = b.key;
@@ -129,6 +130,7 @@ class RetCodeService extends Service {
     const leftArray: object[] = [];
     const rightArray: object[] = [];
     // 左补全
+    console.dir(data);
     if (data[0].date > startTime) {
       const diff: any = (data[0].date - startTime) / intervalMillis;
       const fillData: any = {};
