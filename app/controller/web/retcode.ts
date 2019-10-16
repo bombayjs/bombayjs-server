@@ -35,5 +35,11 @@ export default class RetcodeController extends Controller {
     }
     ctx.helper.success(res);
   }
-
+  public async search() {
+    const { ctx, service: { web } } = this;
+    const payload = ctx.request.body || {};
+    let res = {};
+    res = await web.retcode.search(payload);
+    ctx.helper.success(res);
+  }
 }

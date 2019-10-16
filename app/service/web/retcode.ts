@@ -7,6 +7,42 @@ class RetCodeService extends Service {
   constructor(ctx: Context) {
     super(ctx);
   }
+  public async search(payload) {
+    const { startTime, endTime, query, currentPage, pageSize, order } = payload;
+    const queryParams: any[] = [];
+    const keys = Object.keys(query);
+    keys.map(item => {
+      queryParams.push({ match: { [item]: query[item] } });
+    });
+    const body = {
+      query: {
+        bool : {
+          must: queryParams,
+          filter: {
+            range: {
+              '@timestamp': {
+                gte: moment(startTime),
+                lte: moment(endTime),
+              },
+            },
+          },
+        },
+      },
+      size: pageSize,
+      from: (currentPage - 1) * pageSize,
+      sort: {
+        '@timestamp': {
+          order,
+        },
+      },
+    };
+    const res = await this.esSearch(body);
+    const source: any[] = [];
+    res.hits.hits.map(item => {
+      source.push(item._source);
+    });
+    return { data: source, total: res.hits.hits.length };
+  }
   /**
    * ************************************************************************************************
    * 获取维度聚合数据
@@ -138,9 +174,7 @@ class RetCodeService extends Service {
       Array(Number.parseInt(diff)).fill(1).map((_item, index) => {
         const currentDate = data[0].date + index * intervalMillis;
         const formatDate = moment(currentDate).format('YYYY-MM-DD hh:mm:ss');
-        fillData.date = currentDate;
-        fillData.format = formatDate;
-        leftArray.push(fillData);
+        leftArray.push({ ...fillData, date: currentDate, format: formatDate });
       });
     }
     // 右补全
@@ -151,11 +185,9 @@ class RetCodeService extends Service {
         fillData[item] = 0;
       });
       Array(Number.parseInt(diff)).fill(1).map((_item, index) => {
-        const currentDate = data[data.length - 1].date + index * intervalMillis;
+        const currentDate = data[data.length - 1].date - index * intervalMillis;
         const formatDate = moment(currentDate).format('YYYY-MM-DD hh:mm:ss');
-        fillData.date = currentDate;
-        fillData.format = formatDate;
-        rightArray.push(fillData);
+        rightArray.push({ ...fillData, date: currentDate, format: formatDate });
       });
     }
     const allData = [ ...leftArray, ...data, ...rightArray ];

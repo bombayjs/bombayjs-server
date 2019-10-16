@@ -10,4 +10,5 @@ module.exports = (app: Application) => {
   // 浏览器用户数据上报
   apiV1Router.post('/report/web', report.create);
   apiV1Router.post('/retcode/web', retcode.list);
+  apiV1Router.post('/details/web', retcode.search);
 };
