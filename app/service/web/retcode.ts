@@ -191,7 +191,7 @@ class RetCodeService extends Service {
       });
     }
     const allData = [ ...leftArray, ...data, ...rightArray ];
-    return { allData, total, };
+    return { data: allData, total, };
   }
   /**
    * *******************************************************************************************
