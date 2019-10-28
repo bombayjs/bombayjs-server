@@ -1,17 +1,21 @@
 import { Service } from 'egg';
-
+import * as bodybuilder from 'bodybuilder';
 
 export default class PageVariateService extends Service {
   listValidate: any;
+  getValidate: any;
 
   constructor(props) {
     super(props);
-    
     this.listValidate = {
       project_token: { type: 'string', required: true, trim: true, desc: '请选择项目' },
-    }
+    };
+    this.getValidate = {
+      project_token: { type: 'string', required: true, trim: true, desc: '请选择项目' },
+      dimension: { type: 'string', required: true, trim: true, desc: '请选择维度' },
+    };
   }
-  async get() {
+  async list() {
     const { ctx } = this;
     // const query = ctx.request.body;
     // 参数校验
@@ -20,194 +24,80 @@ export default class PageVariateService extends Service {
       // get error infos from `ctx.paramErrors`;
       return this.app.retError(ctx.paramErrors[0].desc);
     }
-
-    // const cond: any = {
-    //   project_token: query.project_token,
-    // };
-    // // const page = ctx.model.PageVariate.find(cond);
-    // // const event = ctx.model.EventVariate.find(cond);
-    // // const [ rPage, rEvent ] = await Promise.all([ page, event ]);
-    // console.log(rPage, rEvent)
-    // const result = [ ...rPage, ...rEvent ];
     const result = [
       {
-          id: 'tm',
-          name: '时间',
-          groupId: 'normal',
-          groupName: '常用维度',
-          type: 'global',
-      },
-      {
-          id: 'p',
+          id: 'page',
           name: '页面',
           groupId: 'normal',
           groupName: '常用维度',
           type: 'global',
       },
       {
-          id: 'rp',
+          id: 'dr',
           name: '页面来源',
           groupId: 'normal',
           groupName: '常用维度',
           type: 'global',
       },
       {
-          id: 'b',
-          name: '平台（网站/手机应用）',
-          groupId: 'normal',
-          groupName: '常用维度',
+        id: 'sr',
+        name: '屏幕分辨率',
+        groupId: 'normal',
+        groupName: '常用维度',
+        type: 'global',
+      },
+      {
+        id: 'ct',
+        name: '网络',
+        groupId: 'normal',
+        groupName: '常用维度',
+        type: 'global',
+      },
+      {
+        id: 'ul',
+        name: '语言',
+        groupId: 'normal',
+        groupName: '常用维度',
+        type: 'global',
+      },
+      {
+          id: 'ad_info.city',
+          name: '省市',
+          groupId: 'geo',
+          groupName: '地域信息',
           type: 'global',
       },
       {
-          id: 'rd',
-          name: '访问来源',
-          groupId: 'origin',
-          groupName: '用户来源',
-          type: 'global',
-      },
-      {
-          id: 'rt',
-          name: '一级访问来源',
-          groupId: 'origin',
-          groupName: '用户来源',
-          type: 'global',
-      },
-      {
-          id: 'kw',
-          name: '搜索词',
-          groupId: 'origin',
-          groupName: '用户来源',
-          type: 'global',
-      },
-      {
-          id: 'utm_source',
-          name: '广告来源',
-          groupId: 'origin',
-          groupName: '用户来源',
-          type: 'global',
-      },
-      {
-          id: 'utm_campaign',
-          name: '广告名称',
-          groupId: 'origin',
-          groupName: '用户来源',
-          type: 'global',
-      },
-      {
-          id: 'utm_content',
-          name: '广告内容',
-          groupId: 'origin',
-          groupName: '用户来源',
-          type: 'global',
-      },
-      {
-          id: 'utm_term',
-          name: '广告关键字',
-          groupId: 'origin',
-          groupName: '用户来源',
-          type: 'global',
-      },
-      {
-          id: 'utm_medium',
-          name: '广告媒介',
-          groupId: 'origin',
-          groupName: '用户来源',
-          type: 'global',
-      },
-      {
-          id: 'wlink_id',
-          name: '网页监测链接',
-          groupId: 'origin',
-          groupName: '用户来源',
-          type: 'global',
-      },
-      {
-          id: 'city',
+          id: 'ad_info.city',
           name: '城市',
           groupId: 'geo',
           groupName: '地域信息',
           type: 'global',
       },
       {
-          id: 'region',
-          name: '地区',
-          groupId: 'geo',
-          groupName: '地域信息',
-          type: 'global',
-      },
-      {
-          id: 'countryCode',
-          name: '国家代码',
-          groupId: 'geo',
-          groupName: '地域信息',
-          type: 'global',
-      },
-      {
-          id: 'countryName',
+          id: 'ad_info.nation',
           name: '国家名称',
           groupId: 'geo',
           groupName: '地域信息',
           type: 'global',
       },
       {
-          id: 'bw',
+          id: 'detector.browser.name',
           name: '浏览器',
           groupId: 'device',
           groupName: '设备信息',
           type: 'global',
       },
       {
-          id: 'bwv',
-          name: '浏览器版本',
-          groupId: 'device',
-          groupName: '设备信息',
-          type: 'global',
-      },
-      {
-          id: 'os',
+          id: 'detector.os.name',
           name: '操作系统',
           groupId: 'device',
           groupName: '设备信息',
           type: 'global',
       },
       {
-          id: 'osv',
-          name: '操作系统版本',
-          groupId: 'device',
-          groupName: '设备信息',
-          type: 'global',
-      },
-      {
-          id: 'shw',
-          name: '屏幕大小（高*宽）',
-          groupId: 'device',
-          groupName: '设备信息',
-          type: 'global',
-      },
-      {
-          id: 'l',
-          name: '操作系统语言',
-          groupId: 'device',
-          groupName: '设备信息',
-          type: 'global',
-      },
-      {
-          id: 'db',
+          id: 'detector.device.name',
           name: '设备品牌',
-          groupId: 'device',
-          groupName: '设备信息',
-          type: 'global',
-      },
-      {
-          id: 'dm',
-          name: '设备型号',
-          groupId: 'device',
-          groupName: '设备信息',
-          type: 'global',
-      },
-      {
-          id: 'ph',
-          name: '设备类型',
           groupId: 'device',
           groupName: '设备信息',
           type: 'global',
@@ -215,5 +105,28 @@ export default class PageVariateService extends Service {
   ];
 
     return this.app.retResult(result);
+  }
+
+  async get() {
+    const { ctx } = this;
+    const query = ctx.request.body;
+    // 参数校验
+    ctx.validate(this.getValidate);
+    if (ctx.paramErrors) {
+      // get error infos from `ctx.paramErrors`;
+      return this.app.retError(ctx.paramErrors[0].desc);
+    }
+    const body = bodybuilder()
+      .size(0)
+      .query('term', 'token', query.project_token)
+      .query('term', 't', 'pv')
+      .agg('terms', `${query.dimension}.keyword`, 'results')
+      .build();
+    const result = await this.app.elasticsearch.search({
+      index: 'frontend-event-log-web-report-collect-*',
+      type: '_doc',
+      body,
+    });
+    return this.app.retResult(result.aggregations.results.buckets);
   }
 }

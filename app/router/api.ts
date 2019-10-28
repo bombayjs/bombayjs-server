@@ -48,9 +48,10 @@ module.exports = (app: Application) => {
     apiV1Router.post('/pagevariate/list', jwt, pageVariate.list);
 
     // ----------------指标相关---------------
-    apiV1Router.post('/measure/get', jwt, measure.get);
+    apiV1Router.post('/measure/list', jwt, measure.list);
 
     // ----------------维度相关---------------
+    apiV1Router.post('/dimension/list', jwt, dimension.list);
     apiV1Router.post('/dimension/get', jwt, dimension.get);
 
     // ----------------分群相关---------------

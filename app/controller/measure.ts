@@ -1,8 +1,8 @@
 import { Controller } from 'egg';
 
 export default class EventVariateController extends Controller {
-  async get() {
+  async list() {
     const { ctx } = this;
-    ctx.body = await ctx.service.measure.get();
+    ctx.body = await ctx.service.measure.list();
   }
 }

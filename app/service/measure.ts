@@ -11,7 +11,7 @@ export default class PageVariateService extends Service {
       project_token: { type: 'string', required: true, trim: true, desc: '请选择项目' },
     }
   }
-  async get() {
+  async list() {
     const { ctx } = this;
     const query = ctx.request.body;
     // 参数校验
@@ -28,7 +28,21 @@ export default class PageVariateService extends Service {
     const event = ctx.model.EventVariate.find(cond);
     const [ rPage, rEvent ] = await Promise.all([ page, event ]);
     console.log(rPage, rEvent)
-    const result = [ ...rPage, ...rEvent ];
+    const rPages = rPage.map(item => {
+      return {
+        tt: 'page',
+        t: 'pv',
+        ...item._doc,
+      }
+    })
+    const rEvents = rEvent.map(item => {
+      return {
+        tt: 'event',
+        t: 'behavior',
+        ...item._doc,
+      }
+    })
+    const result = [ ...rPages, ...rEvents ];
 
     return this.app.retResult(result);
   }

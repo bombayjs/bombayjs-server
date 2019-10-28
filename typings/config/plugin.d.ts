@@ -20,6 +20,7 @@ import 'egg-redis';
 import 'egg-cors';
 import 'egg-router-plus';
 import 'egg-valparams';
+import 'egg-esearch';
 import '@switchdog/egg-graphql';
 import { EggPluginItem } from 'egg';
 declare module 'egg' {
@@ -42,6 +43,7 @@ declare module 'egg' {
     cors?: EggPluginItem;
     routerPlus?: EggPluginItem;
     valparams?: EggPluginItem;
+    elasticsearch?: EggPluginItem;
     graphql?: EggPluginItem;
   }
 }
