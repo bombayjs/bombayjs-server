@@ -2,11 +2,12 @@ import { Controller } from 'egg';
 // tslint:disable-next-line:no-var-requires
 const detector = require('detector');
 // frontend-event-log-web-report-collect-*
-// interface Ibody {
-//   res?: any;
-//   err?: any;
-//   token?: string;
-// }
+interface Ibody {
+  res?: any;
+  err?: any;
+  token?: string;
+  behavior: {};
+}
 export default class ReportController extends Controller {
   constructor(ctx) {
     super(ctx);
@@ -92,26 +93,21 @@ export default class ReportController extends Controller {
    */
   public async adapterBody() {
     const { ctx, service } = this;
-    // let body: Ibody = ctx.request.body;
-    // console.dir(body);
-    // if (body && typeof body === 'string') {
-    //   body = JSON.parse(body);
-    // }
-    // if (typeof body.res === 'string') {
-    //   const res = JSON.parse(body.res);
-    //   body = { ...body, res };
-    // }
+    let body: Ibody = ctx.request.body;
+    if (body && typeof body === 'string') {
+      body = JSON.parse(body);
+    }
     this.toNumberParas.map(item => {
       if (ctx.query[item]) {
         ctx.query[item] = +ctx.query[item];
       }
     });
-    const ip = '122.100.218.86'; // ctx.get('X-Real-IP') || ctx.get('X-Forwarded-For') || ctx.ip;
+    const ip = ctx.get('X-Real-IP') || ctx.get('X-Forwarded-For') || ctx.ip;
     const location = await service.web.report.getLocation(ip);
     // const url = ctx.url || ctx.headers.referer;
     const user_agent = ctx.headers['user-agent'];
     const device = detector.parse(user_agent);
-    return { ...ctx.query, detector: device, ...location, ip, pv: 1, uv: ip, user_agent, '@timestamp' : new Date() };
+    return { ...ctx.query, detector: device, body: body || {}, ...location, ip, pv: 1, uv: ip, user_agent, '@timestamp' : new Date() };
   }
   // 通过redis 消息队列消费数据
   async saveWebReportDataForRedis(query) {
