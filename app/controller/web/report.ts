@@ -107,6 +107,9 @@ export default class ReportController extends Controller {
     // const url = ctx.url || ctx.headers.referer;
     const user_agent = ctx.headers['user-agent'];
     const device = detector.parse(user_agent);
+    if (ctx.query.dr) {
+      ctx.query.source = ctx.query.dr.split('/')[2].split('.')[1];
+    }
     return { ...ctx.query, detector: device, body: body || {}, ...location, ip, pv: 1, uv: ip, user_agent, '@timestamp' : new Date() };
   }
   // 通过redis 消息队列消费数据
