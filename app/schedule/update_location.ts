@@ -46,6 +46,12 @@ class UpdateLocation extends Subscription {
         key: this.app.config.mapKey,
       },
     });
+    const { lat, lng } = mapData.data.result.location;
+    mapData.data.result.location = {
+      lat,
+      lon: lng,
+    };
+    console.dir(mapData.data.result);
     const { status, result }: { status: number, result: {ad_info: { nation: string }, location: object}} = mapData.data;
     if (status === 0) {
       await this.app.elasticsearch.index({
