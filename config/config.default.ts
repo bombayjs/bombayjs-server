@@ -19,7 +19,8 @@ const {
   HOST_API,
   MAP_API,
   MAP_KEY,
-}: { MONGO_URI?: string, REDIS_CLUSTER?: string, ELASTICSEARCH_CLUSTER?: string, HOST_API?: string, MAP_API?: string, MAP_KEY?: string } = process.env;
+  KAFKA_CLUSTER,
+}: { MONGO_URI?: string, REDIS_CLUSTER?: string, ELASTICSEARCH_CLUSTER?: string, HOST_API?: string, MAP_API?: string, MAP_KEY?: string, KAFKA_CLUSTER?: string } = process.env;
 export default (appInfo: EggAppInfo) => {
   const config = {} as PowerPartial<EggAppConfig>;
   // override config from framework / plugin
@@ -78,32 +79,32 @@ export default (appInfo: EggAppInfo) => {
     locale: 'zh-cn',
     throwError: false,
   };
-  // config.kafkaNode = {
-  //   kafkaHost: `${KAFKA_CLUSTER}`,
-  //   clientOption: {}, // KafkaClient option, more documentation please visit kafka-node
-  //   // 消费者配置
-  //   consumerOption: [{
-  //     groupId: 'group1', // consumerGroup's groupId
-  //     topics: [ 'reportTopic' ], // topics under the same consumer group
-  //     options: {
-  //       fetchMaxWaitMs: 100,
-  //       fetchMinBytes: 1,
-  //       fetchMaxBytes: 1024 * 1024,
-  //   }, // 每个消费组对应的相关 consumerGroup 配置
-  //   }],
-  //   // 生产者配置
-  //   producerOption: {
-  //     requireAcks: 1,
-  //     ackTimeoutMs: 100,
-  //     partitionerType: 2,
-  //     autoCreateTopic: true, // 是否开启自动创建 topic功能
-  //     topics: [ 'reportTopic' ], // 所有消费组需要包含的topics 集合
-  //   },
-  //   messageOption: {
-  //     partition: 0,
-  //     attributes: 0, // send message option
-  //   },
-  // };
+  config.kafkaNode = {
+    kafkaHost: `${KAFKA_CLUSTER}`,
+    clientOption: {}, // KafkaClient option, more documentation please visit kafka-node
+    // 消费者配置
+    // consumerOption: [{
+    //   groupId: 'group1', // consumerGroup's groupId
+    //   topics: [ 'reportTopic' ], // topics under the same consumer group
+    //   options: {
+    //     fetchMaxWaitMs: 100,
+    //     fetchMinBytes: 1,
+    //     fetchMaxBytes: 1024 * 1024,
+    // }, // 每个消费组对应的相关 consumerGroup 配置
+    // }],
+    // // 生产者配置
+    // producerOption: {
+    //   requireAcks: 1,
+    //   ackTimeoutMs: 100,
+    //   partitionerType: 2,
+    //   autoCreateTopic: true, // 是否开启自动创建 topic功能
+    //   topics: [ 'reportTopic' ], // 所有消费组需要包含的topics 集合
+    // },
+    // messageOption: {
+    //   partition: 0,
+    //   attributes: 0, // send message option
+    // },
+  };
   config.elasticsearch = {
     client: {
       host: ELASTICSEARCH_CLUSTER,

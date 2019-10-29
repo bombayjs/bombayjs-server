@@ -26,10 +26,10 @@ const plugin: EggPlugin = {
     enable: true,
     package: 'egg-valparams',
   },
-  // kafkaNode : {
-  //   enable: true,
-  //   package: 'egg-kafka-node',
-  // },
+  kafkaNode : {
+    enable: true,
+    package: 'egg-kafka-node',
+  },
   elasticsearch : {
     enable: true,
     package: 'egg-esearch',
