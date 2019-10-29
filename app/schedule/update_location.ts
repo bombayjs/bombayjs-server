@@ -36,7 +36,7 @@ class UpdateLocation extends Subscription {
     });
     if (res.hits.hits.length === 0) return;
     const { _index, _type, _id, _source } = res.hits.hits[0];
-    const mapData = await this.app.curl(this.app.config.mapApi, {
+    const mapData: any = await this.app.curl(this.app.config.mapApi, {
       dataType: 'json',
       method: 'GET',
       contentType: 'json',
@@ -46,12 +46,12 @@ class UpdateLocation extends Subscription {
         key: this.app.config.mapKey,
       },
     });
+    if (mapData.data.status !== 0) return;
     const { lat, lng } = mapData.data.result.location;
     mapData.data.result.location = {
       lat,
       lon: lng,
     };
-    console.dir(mapData.data.result);
     const { status, result }: { status: number, result: {ad_info: { nation: string }, location: object}} = mapData.data;
     if (status === 0) {
       await this.app.elasticsearch.index({
